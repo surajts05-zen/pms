@@ -1,0 +1,7 @@
+--- ASIANPAINT LOGS ---
+2023-05-08 | buy | Qty: 10.0000 | Price: 3042.1700
+2023-07-06 | buy | Qty: 3.0000 | Price: 3418.9200
+2024-04-03 | buy | Qty: 20.0000 | Price: 2884.0200
+2024-06-03 | buy | Qty: 2.0000 | Price: 2881.5800
+2025-06-30 | dividend | Qty: 1.0000 | Price: 720.0000
+2025-11-27 | dividend | Qty: 1.0000 | Price: 158.0000

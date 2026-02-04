@@ -1,0 +1,8 @@
+--- SPLIT & BONUS TRANSACTIONS ---
+Date: 2025-05-06 | Account: Conservative | Ticker: COFORGE.NS | Type: split | Qty: 1.0000 | Price: 0.0000
+Date: 2025-06-16 | Account: Conservative | Ticker: BAJFINANCE.NS | Type: split | Qty: 2.0000 | Price: 0.0000
+Date: 2025-06-16 | Account: Conservative | Ticker: BAJFINANCE.NS | Type: bonus | Qty: 1.0000 | Price: 0.0000
+Date: 2025-07-04 | Account: Conservative | Ticker: PARAS.NS | Type: split | Qty: 1.0000 | Price: 0.0000
+Date: 2025-08-27 | Account: Conservative | Ticker: HDFCBANK.NS | Type: bonus | Qty: 1.0000 | Price: 0.0000
+Date: 2025-08-27 | Account: Shloka | Ticker: HDFCBANK.NS | Type: bonus | Qty: 1.0000 | Price: 0.0000
+Date: 2026-01-14 | Account: Shloka | Ticker: KOTAKBANK.NS | Type: split | Qty: 5.0000 | Price: 0.0000

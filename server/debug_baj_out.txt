@@ -1,0 +1,8 @@
+--- BAJFINANCE LOGS ---
+2025-05-07 | buy | Qty: 1.0000 | Price: 8816.3300
+2025-06-16 | split | Qty: 2.0000 | Price: 0.0000
+2025-06-16 | bonus | Qty: 1.0000 | Price: 0.0000
+2025-10-09 | buy | Qty: 4.0000 | Price: 1026.2300
+2025-11-18 | buy | Qty: 1.0000 | Price: 1019.1900
+2025-05-26 | dividend | Qty: 1.0000 | Price: 12.0000
+2025-07-25 | dividend | Qty: 1.0000 | Price: 44.0000

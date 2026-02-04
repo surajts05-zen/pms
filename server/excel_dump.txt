@@ -1,0 +1,40 @@
+Reading file: D:\Antigravity\PMS\2025-26 Cash Flow Statement - Monthly.xlsx
+--- First 10 Rows ---
+Row 1: ["2025-26",null,null,"2024-25"]
+Row 2: [null,null,"TOTAL :₹ 925517","Date",null,"TOTAL :₹ 286895"]
+Row 3: [45749,"BOB FD : 74390300008095 - 02.04.25 | 07.05.26 | 7.3 | Mty - 541274| Auto Renew - No",500000,45567,"KTK FD : 6749297060 - 02.10.24 | 27.09.25 | 7.0 | Mty - 214037| Auto Renew - No",206895]
+Row 4: [45784,"BOI FD : 845945110003014 - 15.05.25 | 15.05.26 | 7.05 | Mty - 171582 | Auto Renew - No",160000,45618,"To Sweep FD Kotak : 0076429223",70000,null,null,null,null,"Cumulative","2024-25","Cumulative","2025-26","Consolidated - All Yrs",1212412]
+Row 5: [45832,"Sweep Trf From: 0077028712",-5173,45627,"To Sweep FD Kotak : 0077028712",5000]
+Row 6: [45832,"Sweep Trf From: 0076429223",-15000,45627,"To Sweep FD Kotak : 0078918566",5000,null,null,null,null,"KTK FD : 6749297060 - 02.10.24 | 27.09.25 | 7.0 | Mty - 214037| Auto Renew - No",206895,"BOB FD : 74390300008095 - 02.04.25 | 07.05.26 | 7.3 | Mty - 541274| Auto Renew - No",500000,"BOB FD : 74390300008095 - 02.04.25 | 07.05.26 | 7.3 | Mty - 541274| Auto Renew - No",500000]
+Row 7: [45844,"BOI FD : 845945110003014 - 06.07.25 | 01.01.26 | 4.25 | Mty - 102084 | Auto Renew - No",100000,null,null,null,null,null,null,null,"To Sweep FD Kotak : 0076429223",70000,"BOB FD : 74390300008581 - 07.08.25 | 07.08.26 | 6.5 | Mty - 111993| Auto Renew - No",105000,"BOB FD : 74390300008581 - 07.08.25 | 07.08.26 | 6.5 | Mty - 111993| Auto Renew - No",105000]
+Row 8: [45850,"Sweep Trf From: 0078918566",-5000,null,null,null,null,null,null,null,"To Sweep FD Kotak : 0077028712",5000,"BOI FD : 845941110000637 - 04.01.26 | 16.05.26 | 4.25 | Mty - 243689 | Auto Renew - No",240000,"BOI FD : 845941110000637 - 04.01.26 | 16.05.26 | 4.25 | Mty - 243689 | Auto Renew - No",240000]
+Row 9: [45851,"Sweep Trf From: 0076429223",-20000,null,null,null,null,null,null,null,"To Sweep FD Kotak : 0078918566",5000,"BOI FD : 845945110003014 - 06.07.25 | 01.01.26 | 4.25 | Mty - 102084 | Auto Renew - No",100000,"BOI FD : 845945110003014 - 06.07.25 | 01.01.26 | 4.25 | Mty - 102084 | Auto Renew - No",100000]
+Row 10: [45876,"Sweep Trf From: 0076429223",-37415,null,null,null,null,null,null,"",null,"","BOI FD : 845945110003014 - 15.05.25 | 15.05.26 | 7.05 | Mty - 171582 | Auto Renew - No",160000,"BOI FD : 845945110003014 - 15.05.25 | 15.05.26 | 7.05 | Mty - 171582 | Auto Renew - No",160000]
+
+--- Formula Check (Rows 5-10, Cols F-P) ---
+Cell L6 formula: IF(ISBLANK(K6),"", SUMIF($E$3:$E50500,K6,$F$3:$F50500))
+Cell N6 formula: IF(ISBLANK(M6),"", SUMIF($B$3:$B50500,M6,$C$3:$C50500))
+Cell O6 formula: IFERROR(__xludf.DUMMYFUNCTION("sort(unique(FLATTEN(B3:B50500,E3:E50500)))"),"BOB FD : 74390300008095 - 02.04.25 | 07.05.26 | 7.3 | Mty - 541274| Auto Renew - No")
+Cell P6 formula: IF(ISBLANK(O6),"", SUM(SUMIF($I$6:$I50500,O6,$J$6:$J50500),SUMIF($K$6:$K50500,O6,$L$6:$L50500),SUMIF($M$6:$M50500,O6,$N$6:$N50500)))
+Cell L7 formula: IF(ISBLANK(K7),"", SUMIF($E$3:$E50501,K7,$F$3:$F50501))
+Cell N7 formula: IF(ISBLANK(M7),"", SUMIF($B$3:$B50501,M7,$C$3:$C50501))
+Cell O7 formula: IFERROR(__xludf.DUMMYFUNCTION("""COMPUTED_VALUE"""),"BOB FD : 74390300008581 - 07.08.25 | 07.08.26 | 6.5 | Mty - 111993| Auto Renew - No")
+Cell P7 formula: IF(ISBLANK(O7),"", SUM(SUMIF($I$6:$I50501,O7,$J$6:$J50501),SUMIF($K$6:$K50501,O7,$L$6:$L50501),SUMIF($M$6:$M50501,O7,$N$6:$N50501)))
+Cell L8 formula: IF(ISBLANK(K8),"", SUMIF($E$3:$E50502,K8,$F$3:$F50502))
+Cell N8 formula: IF(ISBLANK(M8),"", SUMIF($B$3:$B50502,M8,$C$3:$C50502))
+Cell O8 formula: IFERROR(__xludf.DUMMYFUNCTION("""COMPUTED_VALUE"""),"BOI FD : 845941110000637 - 04.01.26 | 16.05.26 | 4.25 | Mty - 243689 | Auto Renew - No")
+Cell P8 formula: IF(ISBLANK(O8),"", SUM(SUMIF($I$6:$I50502,O8,$J$6:$J50502),SUMIF($K$6:$K50502,O8,$L$6:$L50502),SUMIF($M$6:$M50502,O8,$N$6:$N50502)))
+Cell L9 formula: IF(ISBLANK(K9),"", SUMIF($E$3:$E50503,K9,$F$3:$F50503))
+Cell N9 formula: IF(ISBLANK(M9),"", SUMIF($B$3:$B50503,M9,$C$3:$C50503))
+Cell O9 formula: IFERROR(__xludf.DUMMYFUNCTION("""COMPUTED_VALUE"""),"BOI FD : 845945110003014 - 06.07.25 | 01.01.26 | 4.25 | Mty - 102084 | Auto Renew - No")
+Cell P9 formula: IF(ISBLANK(O9),"", SUM(SUMIF($I$6:$I50503,O9,$J$6:$J50503),SUMIF($K$6:$K50503,O9,$L$6:$L50503),SUMIF($M$6:$M50503,O9,$N$6:$N50503)))
+Cell J10 formula: IF(ISBLANK(I10),"",SUMIF(#REF!,I10,#REF!))
+Cell L10 formula: IF(ISBLANK(K10),"", SUMIF($E$3:$E50504,K10,$F$3:$F50504))
+Cell N10 formula: IF(ISBLANK(M10),"", SUMIF($B$3:$B50504,M10,$C$3:$C50504))
+Cell O10 formula: IFERROR(__xludf.DUMMYFUNCTION("""COMPUTED_VALUE"""),"BOI FD : 845945110003014 - 15.05.25 | 15.05.26 | 7.05 | Mty - 171582 | Auto Renew - No")
+Cell P10 formula: IF(ISBLANK(O10),"", SUM(SUMIF($I$6:$I50504,O10,$J$6:$J50504),SUMIF($K$6:$K50504,O10,$L$6:$L50504),SUMIF($M$6:$M50504,O10,$N$6:$N50504)))
+Cell J11 formula: IF(ISBLANK(I11),"",SUMIF(#REF!,I11,#REF!))
+Cell L11 formula: IF(ISBLANK(K11),"", SUMIF($E$3:$E50505,K11,$F$3:$F50505))
+Cell N11 formula: IF(ISBLANK(M11),"", SUMIF($B$3:$B50505,M11,$C$3:$C50505))
+Cell O11 formula: IFERROR(__xludf.DUMMYFUNCTION("""COMPUTED_VALUE"""),"ESFL NCD : INE532F07HZ2 - 08.10.25 | 14.10.27 | 9.0 | Mty - 130691| Auto Renew - No")
+Cell P11 formula: IF(ISBLANK(O11),"", SUM(SUMIF($I$6:$I50505,O11,$J$6:$J50505),SUMIF($K$6:$K50505,O11,$L$6:$L50505),SUMIF($M$6:$M50505,O11,$N$6:$N50505)))

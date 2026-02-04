@@ -1,0 +1,9 @@
+--- ASIANPAINT SPECIFIC LOGS ---
+2023-05-08 | Conservative | ASIANPAINT.NS | buy | 10.0000 | Price: 3042.1700
+2023-07-06 | Conservative | ASIANPAINT.NS | buy | 3.0000 | Price: 3418.9200
+2024-04-03 | Conservative | ASIANPAINT.NS | buy | 20.0000 | Price: 2884.0200
+2024-06-03 | Conservative | ASIANPAINT.NS | buy | 2.0000 | Price: 2881.5800
+2024-03-04 | Shloka | ASIANPAINT.NS | transfer_in | 1.0000 | Price: 2836.4000
+2024-06-03 | Shloka | ASIANPAINT.NS | transfer_in | 5.0000 | Price: 2865.5000
+2025-06-30 | Conservative | ASIANPAINT.NS | dividend | 1.0000 | Price: 720.0000
+2025-11-27 | Conservative | ASIANPAINT.NS | dividend | 1.0000 | Price: 158.0000
