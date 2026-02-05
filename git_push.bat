@@ -8,16 +8,10 @@ IF NOT EXIST ".git" (
     git init
 )
 
-:: Get current date and time for the commit message
-for /f "tokens=2 delims==" %%I in ('wmic os get localdatetime /value') do set datetime=%%I
-set YYYY=%datetime:~0,4%
-set MM=%datetime:~4,2%
-set DD=%datetime:~6,2%
-set HH=%datetime:~8,2%
-set Min=%datetime:~10,2%
-set Sec=%datetime:~12,2%
+:: Get current date and time for the commit message using PowerShell (more robust)
+for /f "usebackq delims=" %%I in (`powershell -NoProfile -Command "Get-Date -Format 'yyyy-MM-dd HH:mm:ss'"`) do set TIMESTAMP=%%I
 
-set COMMIT_MSG=Auto update: %YYYY%-%MM%-%DD% %HH%:%Min%:%Sec%
+set COMMIT_MSG=Auto update: %TIMESTAMP%
 
 echo.
 echo === Git Update Process Started ===
