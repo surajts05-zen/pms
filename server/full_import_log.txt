@@ -1,0 +1,58 @@
+[dotenv@17.2.3] injecting env (6) from server\.env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+Database connected.
+
+--- Processing Sheet: May 2025 ---
+Cleaning up transactions from 2025-04-30 to 2025-05-30...
+Found 10 accounts in sheet.
+Warning: No type for row 5, account Kunica BoB Loan
+Imported 128 transactions for May 2025.
+
+--- Processing Sheet: Jun 2025 ---
+Cleaning up transactions from 2025-05-31 to 2025-06-29...
+Found 10 accounts in sheet.
+Imported 139 transactions for Jun 2025.
+
+--- Processing Sheet: Jul 2025 ---
+Cleaning up transactions from 2025-06-30 to 2025-07-30...
+Found 10 accounts in sheet.
+Imported 139 transactions for Jul 2025.
+
+--- Processing Sheet: Aug 2025 ---
+Cleaning up transactions from 2025-07-31 to 2025-08-30...
+Found 10 accounts in sheet.
+Imported 154 transactions for Aug 2025.
+
+--- Processing Sheet: Sep 2025 ---
+Cleaning up transactions from 2025-08-31 to 2025-09-29...
+Found 10 accounts in sheet.
+Imported 139 transactions for Sep 2025.
+
+--- Processing Sheet: Oct 2025 ---
+Cleaning up transactions from 2025-09-30 to 2025-10-30...
+Found 10 accounts in sheet.
+Imported 131 transactions for Oct 2025.
+
+--- Processing Sheet: Nov 2025 ---
+Cleaning up transactions from 2025-10-31 to 2025-11-29...
+Found 10 accounts in sheet.
+Imported 169 transactions for Nov 2025.
+
+--- Processing Sheet: Dec 2025 ---
+Cleaning up transactions from 2025-11-30 to 2025-12-30...
+Found 10 accounts in sheet.
+Imported 127 transactions for Dec 2025.
+
+--- Processing Sheet: Jan 2026 ---
+Cleaning up transactions from 2025-12-31 to 2026-01-30...
+Found 10 accounts in sheet.
+Imported 127 transactions for Jan 2026.
+
+--- Processing Sheet: Feb 2026 ---
+Cleaning up transactions from 2026-01-31 to 2026-02-27...
+Found 9 accounts in sheet.
+Imported 27 transactions for Feb 2026.
+
+--- Linking Transfers ---
+Linked 140 pairs of transfers.
+
+Import process complete.

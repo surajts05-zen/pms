@@ -1,0 +1,34 @@
+[dotenv@17.2.3] injecting env (6) from server\.env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+
+=== Accounts in DB ===
+- Amazon Pay ICICI CC  | Type: creditcard   | Inst: Amazon
+- Aspirational         | Type: demat        | Inst: Zerodha
+- BoB                  | Type: bank         | Inst: BoB
+- BOI                  | Type: bank         | Inst: BOI
+- Cash                 | Type: cash         | Inst: Cash
+- Conservative         | Type: demat        | Inst: Sharekhan
+- ICICI                | Type: bank         | Inst: ICICI
+- ICICI CC             | Type: creditcard   | Inst: ICICI
+- IPPB                 | Type: bank         | Inst: IPPB
+- Kotak 811            | Type: bank         | Inst: Kotak
+- Kotak Salary         | Type: bank         | Inst: Kotak
+- Kotak Spendz         | Type: bank         | Inst: Kotak
+- Kunica BoB Loan      | Type: loan         | Inst: Kunica
+- Shloka               | Type: demat        | Inst: Zerodha
+Total Transactions: 101
+Apr 2025  :    76 transactions
+May 2025  :    25 transactions
+Jun 2025  :     0 transactions
+Jul 2025  :     0 transactions
+Aug 2025  :     0 transactions
+Sep 2025  :     0 transactions
+Oct 2025  :     0 transactions
+Nov 2025  :     0 transactions
+Dec 2025  :     0 transactions
+Jan 2026  :     0 transactions
+Feb 2026  :     0 transactions
+
+Unlinked Transfers: 36
+
+=== Category Counts ===
+Total Categories: 48

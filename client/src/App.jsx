@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import FixedDeposits from './pages/FixedDeposits';
+import Cashflow from './pages/Cashflow';
+import Categories from './pages/Categories';
+import Dividends from './pages/Dividends';
+import Settings from './pages/Settings';
 import {
     TrendingUp,
     Plus,
@@ -9,7 +13,11 @@ import {
     CreditCard,
     Trash2,
     Edit2,
-    Landmark
+    Landmark,
+    Wallet,
+    Tags,
+    DollarSign,
+    Settings as SettingsIcon
 } from 'lucide-react';
 import {
     AreaChart,
@@ -299,7 +307,7 @@ function App() {
                     >
                         ALL
                     </button>
-                    {accounts.map(acc => {
+                    {accounts.filter(acc => acc.type === 'demat').map(acc => {
                         let label = acc.name.toUpperCase();
 
                         return (
@@ -455,6 +463,8 @@ function App() {
                             <option value="demat">Demat</option>
                             <option value="bank">Bank</option>
                             <option value="cash">Cash</option>
+                            <option value="creditcard">Credit Card</option>
+                            <option value="loan">Loan</option>
                         </select>
                     </div>
                     <div className="form-group" style={{ marginBottom: 0 }}>
@@ -585,6 +595,18 @@ function App() {
                     <div className={`nav-item ${activeTab === 'fds' ? 'active' : ''}`} onClick={() => setActiveTab('fds')}>
                         <Landmark size={20} /> Fixed Deposits
                     </div>
+                    <div className={`nav-item ${activeTab === 'cashflow' ? 'active' : ''}`} onClick={() => setActiveTab('cashflow')}>
+                        <Wallet size={20} /> Cashflow
+                    </div>
+                    <div className={`nav-item ${activeTab === 'categories' ? 'active' : ''}`} onClick={() => setActiveTab('categories')}>
+                        <Tags size={20} /> Categories
+                    </div>
+                    <div className={`nav-item ${activeTab === 'dividends' ? 'active' : ''}`} onClick={() => setActiveTab('dividends')}>
+                        <DollarSign size={20} /> Dividends
+                    </div>
+                    <div className={`nav-item ${activeTab === 'settings' ? 'active' : ''}`} onClick={() => setActiveTab('settings')}>
+                        <SettingsIcon size={20} /> Settings
+                    </div>
                 </nav>
 
                 <div style={{ marginTop: 'auto' }}>
@@ -607,6 +629,10 @@ function App() {
                 {activeTab === 'journal' && renderJournal()}
                 {activeTab === 'accounts' && renderAccounts()}
                 {activeTab === 'fds' && <FixedDeposits />}
+                {activeTab === 'cashflow' && <Cashflow />}
+                {activeTab === 'categories' && <Categories />}
+                {activeTab === 'dividends' && <Dividends />}
+                {activeTab === 'settings' && <Settings />}
             </main>
 
             {isModalOpen && (

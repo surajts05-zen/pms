@@ -12,7 +12,7 @@ const Account = sequelize.define('Account', {
         allowNull: false,
     },
     type: {
-        type: DataTypes.ENUM('bank', 'demat', 'pf', 'cash'),
+        type: DataTypes.ENUM('bank', 'demat', 'pf', 'cash', 'creditcard', 'loan'),
         allowNull: false,
     },
     institution: {
@@ -33,6 +33,14 @@ const Account = sequelize.define('Account', {
     displayOrder: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
+    },
+    openingBalance: {
+        type: DataTypes.DECIMAL(20, 2),
+        defaultValue: 0,
+    },
+    openingBalanceDate: {
+        type: DataTypes.DATEONLY,
+        allowNull: true,
     }
 });
 
@@ -145,6 +153,14 @@ const CashflowTransaction = sequelize.define('CashflowTransaction', {
         type: DataTypes.DECIMAL(20, 2),
         allowNull: false,
     },
+    debit: {
+        type: DataTypes.DECIMAL(20, 2),
+        defaultValue: 0,
+    },
+    credit: {
+        type: DataTypes.DECIMAL(20, 2),
+        defaultValue: 0,
+    },
     transactionDate: {
         type: DataTypes.DATEONLY,
         allowNull: false,
@@ -154,8 +170,24 @@ const CashflowTransaction = sequelize.define('CashflowTransaction', {
         allowNull: true,
     },
     type: {
-        type: DataTypes.ENUM('income', 'expense'),
+        type: DataTypes.ENUM('income', 'expense', 'transfer', 'transfer_in', 'transfer_out'),
         allowNull: false,
+    },
+    transferAccountId: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        references: {
+            model: 'Accounts',
+            key: 'id'
+        }
+    },
+    linkedTransactionId: {
+        type: DataTypes.UUID,
+        allowNull: true,
+    },
+    scrip: {
+        type: DataTypes.STRING,
+        allowNull: true,
     }
 });
 
@@ -224,6 +256,6 @@ Account.hasMany(CashflowTransaction);
 CashflowTransaction.belongsTo(Account);
 
 CashflowCategory.hasMany(CashflowTransaction);
-CashflowTransaction.belongsTo(CashflowCategory);
+CashflowTransaction.belongsTo(CashflowCategory, { foreignKey: { allowNull: true } });
 
 module.exports = { Account, Instrument, Transaction, PriceHistory, FixedDeposit, CashflowCategory, CashflowTransaction, sequelize };

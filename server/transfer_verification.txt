@@ -1,0 +1,26 @@
+Found 25 transfers in April 2025:
+2025-04-02 | Kotak 811            | Type: transfer_in  | Amount:    2500.00 | Description: From Kotak Salary
+2025-04-02 | Kotak Salary         | Type: transfer_out | Amount:    2500.00 | Description: To Kotak 811
+2025-04-02 | Kotak Salary         | Type: transfer_out | Amount:   10000.00 | Description: To Kotak Spendz
+2025-04-02 | Kotak Spendz         | Type: transfer_in  | Amount:   10000.00 | Description: From Kotak Salary
+2025-04-02 | ICICI                | Type: transfer_in  | Amount:  150000.00 | Description: From Kotak Salary
+2025-04-02 | Kotak Salary         | Type: transfer_out | Amount:  150000.00 | Description: To ICICI
+2025-04-02 | Kotak Salary         | Type: transfer_out | Amount:  300000.00 | Description: To Bob
+2025-04-02 | BoB                  | Type: transfer_in  | Amount:  300000.00 | Description: From Kotak
+2025-04-13 | Kotak Spendz         | Type: transfer_in  | Amount:    5000.00 | Description: From Kotak Salary
+2025-04-13 | Kotak Salary         | Type: transfer_out | Amount:    5000.00 | Description: To Kotak Spendz
+2025-04-15 | Amazon Pay ICICI CC  | Type: transfer_in  | Amount:   45985.82 | Description: From ICICI
+2025-04-19 | Kotak Salary         | Type: transfer_out | Amount:    1000.00 | Description: To Kotak Spendz
+2025-04-19 | Kotak Spendz         | Type: transfer_in  | Amount:    1000.00 | Description: From Kotak Salary
+2025-04-24 | Kotak Spendz         | Type: transfer_in  | Amount:    1000.00 | Description: From Kotak Salary
+2025-04-24 | Kotak Salary         | Type: transfer_out | Amount:    1000.00 | Description: To Kotak Spendz
+2025-04-24 | ICICI                | Type: transfer_in  | Amount:    2500.00 | Description: From Kotak Salary
+2025-04-24 | Kotak Salary         | Type: transfer_out | Amount:    2500.00 | Description: To ICICI
+2025-04-24 | ICICI                | Type: transfer_in  | Amount:    3200.00 | Description: From Lavanya (Yoga Class)
+2025-04-24 | ICICI                | Type: transfer_in  | Amount:    6400.00 | Description: From Janardhan (Yoga Class)
+2025-04-24 | ICICI                | Type: transfer_out | Amount:    9600.00 | Description: Yoga mats (Janardhan & Lavanya) (Pune institute Pradeep RIMI)
+2025-04-26 | Kotak Salary         | Type: transfer_out | Amount:    1000.00 | Description: To Kotak Spendz
+2025-04-26 | Kotak Spendz         | Type: transfer_in  | Amount:    1000.00 | Description: From Kotak Salary
+2025-04-27 | Kotak Salary         | Type: transfer_out | Amount:    1000.00 | Description: To Kotak Spendz
+2025-04-27 | Kotak Spendz         | Type: transfer_in  | Amount:    1000.00 | Description: From Kotak Salary
+2025-04-30 | Amazon Pay ICICI CC  | Type: transfer_in  | Amount:   45000.00 | Description: From ICICI

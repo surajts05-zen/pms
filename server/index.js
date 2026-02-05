@@ -55,6 +55,21 @@ app.put('/api/accounts/reorder', async (req, res) => {
     }
 });
 
+app.put('/api/accounts/bulk-opening-balances', async (req, res) => {
+    try {
+        const { accounts } = req.body; // Array of { id, openingBalance, openingBalanceDate }
+        await Promise.all(
+            accounts.map(acc => Account.update({
+                openingBalance: acc.openingBalance,
+                openingBalanceDate: acc.openingBalanceDate
+            }, { where: { id: acc.id } }))
+        );
+        res.json({ success: true });
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+
 // Instruments
 app.get('/api/instruments', async (req, res) => {
     const instruments = await Instrument.findAll();
@@ -100,6 +115,7 @@ app.use('/api/portfolio', portfolioRouter);
 app.use('/api/fds', require('./routes/fixedDeposit'));
 app.use('/api/cashflow', require('./routes/cashflow'));
 app.use('/api/categories', require('./routes/categories'));
+app.use('/api/dividends', require('./routes/dividends'));
 
 // Sync Database and Start Server
 sequelize.sync({ alter: true }).then(() => {
