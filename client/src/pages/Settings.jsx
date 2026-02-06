@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Save, RefreshCw } from 'lucide-react';
 import axios from 'axios';
-
-const api = axios.create({
-    baseURL: 'http://localhost:5000/api'
-});
+import TwoFactorSetup from '../components/TwoFactorSetup';
+import api from '../services/api';
 
 function Settings() {
     const [accounts, setAccounts] = useState([]);
@@ -126,6 +124,10 @@ function Settings() {
                         </tbody>
                     </table>
                 </div>
+            </div>
+
+            <div className="card" style={{ marginTop: '2rem' }}>
+                <TwoFactorSetup />
             </div>
 
             <style dangerouslySetInnerHTML={{

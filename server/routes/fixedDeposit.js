@@ -1,11 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const { FixedDeposit, Account, Transaction, sequelize } = require('../models');
+const { authenticateToken } = require('./auth');
 
 // GET all FDs
-router.get('/', async (req, res) => {
+router.get('/', authenticateToken, async (req, res) => {
     try {
         const fds = await FixedDeposit.findAll({
+            where: { UserId: req.user.id },
             order: [['startDate', 'DESC']]
         });
         res.json(fds);
@@ -15,9 +17,9 @@ router.get('/', async (req, res) => {
 });
 
 // POST create FD
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
     try {
-        const fd = await FixedDeposit.create(req.body);
+        const fd = await FixedDeposit.create({ ...req.body, UserId: req.user.id });
         res.status(201).json(fd);
     } catch (err) {
         res.status(400).json({ error: err.message });
@@ -25,13 +27,13 @@ router.post('/', async (req, res) => {
 });
 
 // PUT update FD
-router.put('/:id', async (req, res) => {
+router.put('/:id', authenticateToken, async (req, res) => {
     try {
         const [updated] = await FixedDeposit.update(req.body, {
-            where: { id: req.params.id }
+            where: { id: req.params.id, UserId: req.user.id }
         });
         if (updated) {
-            const updatedFD = await FixedDeposit.findByPk(req.params.id);
+            const updatedFD = await FixedDeposit.findOne({ where: { id: req.params.id, UserId: req.user.id } });
             res.json(updatedFD);
         } else {
             res.status(404).json({ error: 'Fixed Deposit not found' });
@@ -42,10 +44,10 @@ router.put('/:id', async (req, res) => {
 });
 
 // DELETE FD
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authenticateToken, async (req, res) => {
     try {
         const deleted = await FixedDeposit.destroy({
-            where: { id: req.params.id }
+            where: { id: req.params.id, UserId: req.user.id }
         });
         if (deleted) {
             res.json({ success: true, message: 'Fixed Deposit deleted' });
@@ -58,16 +60,16 @@ router.delete('/:id', async (req, res) => {
 });
 
 // POST Redeem FD
-router.post('/:id/redeem', async (req, res) => {
+router.post('/:id/redeem', authenticateToken, async (req, res) => {
     const t = await sequelize.transaction();
     try {
         const { id } = req.params;
         const { redemptionDate, finalAmount, accountId } = req.body;
 
-        const fd = await FixedDeposit.findByPk(id);
+        const fd = await FixedDeposit.findOne({ where: { id, UserId: req.user.id } });
         if (!fd) {
             await t.rollback();
-            return res.status(404).json({ error: 'Fixed Deposit not found' });
+            return res.status(404).json({ error: 'Fixed Deposit not found or access denied' });
         }
 
         if (fd.status === 'REDEEMED') {
@@ -92,6 +94,7 @@ router.post('/:id/redeem', async (req, res) => {
                 price: 1,
                 notes: `FD Redemption (Principal) - ${fd.bankName}`,
                 AccountId: accountId,
+                UserId: req.user.id,
                 InstrumentId: null // Cash transaction
             }, { transaction: t });
 
@@ -104,12 +107,13 @@ router.post('/:id/redeem', async (req, res) => {
                     price: 1,
                     notes: `FD Redemption (Interest) - ${fd.bankName}`,
                     AccountId: accountId,
+                    UserId: req.user.id,
                     InstrumentId: null
                 }, { transaction: t });
             }
 
             // Update Account Balance
-            const account = await Account.findByPk(accountId);
+            const account = await Account.findOne({ where: { id: accountId, UserId: req.user.id } });
             if (account) {
                 await account.increment('balance', { by: totalRedemption, transaction: t });
             }

@@ -2,10 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Filter, Download, TrendingUp, TrendingDown } from 'lucide-react';
 import axios from 'axios';
 import { formatIndianRupee } from '../utils/formatCurrency';
-
-const api = axios.create({
-    baseURL: 'http://localhost:5000/api'
-});
+import api from '../services/api';
 
 function Cashflow() {
     const [accounts, setAccounts] = useState([]);
@@ -13,6 +10,7 @@ function Cashflow() {
     const [transactions, setTransactions] = useState([]);
     const [summary, setSummary] = useState(null);
     const [selectedAccount, setSelectedAccount] = useState('all');
+    const [selectedAccountType, setSelectedAccountType] = useState('all');
     const [period, setPeriod] = useState('monthly'); // monthly, fy, custom
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
@@ -21,6 +19,7 @@ function Cashflow() {
         endDate: new Date().toISOString().split('T')[0]
     });
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [sortConfig, setSortConfig] = useState({ field: 'transactionDate', order: 'DESC' });
     const [columnFilters, setColumnFilters] = useState({
         transactionDate: '',
@@ -103,17 +102,17 @@ function Cashflow() {
                 txnRes = await api.get(`/cashflow/ledger/${selectedAccount}`, { params });
                 // For ledger, the data is in txnRes.data.ledger
                 setTransactions(txnRes.data.ledger || []);
-                // Add opening/closing balance info to summary
-                if (txnRes.data.periodOpeningBalance !== undefined) {
-                    setSummary(prev => ({
-                        ...prev,
-                        openingBalance: txnRes.data.periodOpeningBalance,
-                        closingBalance: txnRes.data.closingBalance
-                    }));
-                }
             } else {
                 txnRes = await api.get('/cashflow', { params });
-                setTransactions(txnRes.data);
+                // Calculate running balance for consolidated view
+                let currentBal = summaryRes.data.openingBalance || 0;
+                const txnsWithBal = (txnRes.data || []).map(txn => {
+                    const debit = parseFloat(txn.debit || 0);
+                    const credit = parseFloat(txn.credit || 0);
+                    currentBal += (credit - debit);
+                    return { ...txn, runningBalance: currentBal };
+                });
+                setTransactions(txnsWithBal);
             }
 
             // Set default account if not set
@@ -327,24 +326,46 @@ function Cashflow() {
                             <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.25rem' }}>
                                 Account:
                             </label>
-                            <div style={{ display: 'flex', gap: '0.5rem', background: 'rgba(255,255,255,0.05)', padding: '0.25rem', borderRadius: '0.5rem', display: 'inline-flex' }}>
-                                <button
-                                    className={`nav-item ${selectedAccount === 'all' ? 'active' : ''}`}
-                                    style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', border: 'none', background: 'none' }}
-                                    onClick={() => setSelectedAccount('all')}
-                                >
-                                    ALL
-                                </button>
-                                {accounts.map(acc => (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                {/* Account Type Filter */}
+                                <div style={{ display: 'flex', gap: '0.5rem', background: 'rgba(255,255,255,0.05)', padding: '0.25rem', borderRadius: '0.5rem', flexWrap: 'wrap' }}>
+                                    {['all', ...new Set(accounts.filter(a => !a.isArchived).map(a => a.type))].map(type => (
+                                        <button
+                                            key={type}
+                                            className={`nav-item ${selectedAccountType === type ? 'active' : ''}`}
+                                            style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', border: 'none', background: 'none', textTransform: 'uppercase' }}
+                                            onClick={() => {
+                                                setSelectedAccountType(type);
+                                                setSelectedAccount('all'); // Reset account selection when type changes
+                                            }}
+                                        >
+                                            {type === 'all' ? 'ALL TYPES' : type}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                {/* Account List (Filtered) */}
+                                <div style={{ display: 'flex', gap: '0.5rem', background: 'rgba(255,255,255,0.05)', padding: '0.25rem', borderRadius: '0.5rem', display: 'inline-flex', flexWrap: 'wrap' }}>
                                     <button
-                                        key={acc.id}
-                                        className={`nav-item ${selectedAccount === acc.id ? 'active' : ''}`}
+                                        className={`nav-item ${selectedAccount === 'all' ? 'active' : ''}`}
                                         style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', border: 'none', background: 'none' }}
-                                        onClick={() => setSelectedAccount(acc.id)}
+                                        onClick={() => setSelectedAccount('all')}
                                     >
-                                        {acc.name.toUpperCase()}
+                                        ALL ACCOUNTS
                                     </button>
-                                ))}
+                                    {accounts
+                                        .filter(acc => !acc.isArchived && (selectedAccountType === 'all' || acc.type === selectedAccountType))
+                                        .map(acc => (
+                                            <button
+                                                key={acc.id}
+                                                className={`nav-item ${selectedAccount === acc.id ? 'active' : ''}`}
+                                                style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', border: 'none', background: 'none' }}
+                                                onClick={() => setSelectedAccount(acc.id)}
+                                            >
+                                                {acc.name.toUpperCase()}
+                                            </button>
+                                        ))}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -428,9 +449,7 @@ function Cashflow() {
                                     <th onClick={() => handleSort('credit')} style={{ cursor: 'pointer', textAlign: 'right' }}>
                                         Credit (In) {sortConfig.field === 'credit' && (sortConfig.order === 'ASC' ? '↑' : '↓')}
                                     </th>
-                                    {selectedAccount !== 'all' && (
-                                        <th style={{ textAlign: 'right' }}>Balance</th>
-                                    )}
+                                    <th style={{ textAlign: 'right' }}>Balance</th>
                                 </tr>
                                 <tr>
                                     <th style={{ padding: '0.25rem' }}>
@@ -485,11 +504,11 @@ function Cashflow() {
                                     </th>
                                     <th style={{ padding: '0.25rem' }}></th>
                                     <th style={{ padding: '0.25rem' }}></th>
-                                    {selectedAccount !== 'all' && <th style={{ padding: '0.25rem' }}></th>}
+                                    <th style={{ padding: '0.25rem' }}></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {selectedAccount !== 'all' && summary?.openingBalance !== undefined && (
+                                {summary?.openingBalance !== undefined && (
                                     <tr style={{ background: 'rgba(255,255,255,0.02)', fontWeight: '600' }}>
                                         <td>-</td>
                                         <td style={{ color: 'var(--text-muted)' }}>-</td>
@@ -503,7 +522,7 @@ function Cashflow() {
                                 )}
                                 {transactions.length === 0 ? (
                                     <tr>
-                                        <td colSpan={selectedAccount !== 'all' ? "8" : "7"} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '2rem' }}>
+                                        <td colSpan="8" style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '2rem' }}>
                                             No transactions found for this period
                                         </td>
                                     </tr>
@@ -542,17 +561,27 @@ function Cashflow() {
                                             }}>
                                                 {parseFloat(txn.credit) > 0 ? formatIndianRupee(parseFloat(txn.credit)) : '-'}
                                             </td>
-                                            {selectedAccount !== 'all' && (
-                                                <td style={{
-                                                    fontWeight: '600',
-                                                    textAlign: 'right',
-                                                    color: 'var(--text-main)'
-                                                }}>
-                                                    {formatIndianRupee(txn.runningBalance)}
-                                                </td>
-                                            )}
+                                            <td style={{
+                                                fontWeight: '600',
+                                                textAlign: 'right',
+                                                color: 'var(--text-main)'
+                                            }}>
+                                                {formatIndianRupee(txn.runningBalance)}
+                                            </td>
                                         </tr>
                                     ))
+                                )}
+                                {summary?.closingBalance !== undefined && (
+                                    <tr style={{ background: 'rgba(255,255,255,0.02)', fontWeight: '600' }}>
+                                        <td>-</td>
+                                        <td style={{ color: 'var(--text-muted)' }}>-</td>
+                                        <td style={{ color: 'var(--accent)' }}>PERIOD CLOSING BALANCE</td>
+                                        <td style={{ color: 'var(--text-muted)' }}>Final balance for this period</td>
+                                        <td><span className="type-tag" style={{ background: 'rgba(16, 185, 129, 0.1)', color: 'var(--accent)' }}>PCB</span></td>
+                                        <td style={{ textAlign: 'right' }}>-</td>
+                                        <td style={{ textAlign: 'right' }}>-</td>
+                                        <td style={{ textAlign: 'right', color: 'var(--text-main)' }}>{formatIndianRupee(parseFloat(summary.closingBalance))}</td>
+                                    </tr>
                                 )}
                             </tbody>
                         </table>

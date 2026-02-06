@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, Save, X } from 'lucide-react';
-import axios from 'axios';
-
-const api = axios.create({
-    baseURL: 'http://localhost:5000/api'
-});
+import api from '../services/api';
 
 function Categories() {
     const [categories, setCategories] = useState([]);

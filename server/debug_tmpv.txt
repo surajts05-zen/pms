@@ -1,0 +1,54 @@
+[
+  {
+    "id": "d2915ad9-39c1-4829-aad7-6c7d521deac6",
+    "type": "buy",
+    "transactionDate": "2023-09-01",
+    "quantity": "10.0000",
+    "price": "422.9700",
+    "fees": "0.0000",
+    "notes": null,
+    "createdAt": "2026-02-04T11:55:09.663Z",
+    "updatedAt": "2026-02-05T06:51:52.583Z",
+    "AccountId": "7606f3b0-2289-4546-b601-2f0df5efa60b",
+    "InstrumentId": "feda88d2-c11e-43d6-9a57-c435832853fe"
+  },
+  {
+    "id": "5733b487-aae6-46f1-820e-ad141c3aa05c",
+    "type": "buy",
+    "transactionDate": "2023-10-06",
+    "quantity": "10.0000",
+    "price": "431.8400",
+    "fees": "0.0000",
+    "notes": null,
+    "createdAt": "2026-02-04T11:55:09.670Z",
+    "updatedAt": "2026-02-05T06:51:52.590Z",
+    "AccountId": "7606f3b0-2289-4546-b601-2f0df5efa60b",
+    "InstrumentId": "feda88d2-c11e-43d6-9a57-c435832853fe"
+  },
+  {
+    "id": "f5f291ba-498f-4d25-a0bc-92fe3c0b7116",
+    "type": "buy",
+    "transactionDate": "2024-07-05",
+    "quantity": "8.0000",
+    "price": "691.8300",
+    "fees": "0.0000",
+    "notes": null,
+    "createdAt": "2026-02-04T11:55:09.787Z",
+    "updatedAt": "2026-02-05T06:51:52.593Z",
+    "AccountId": "7606f3b0-2289-4546-b601-2f0df5efa60b",
+    "InstrumentId": "feda88d2-c11e-43d6-9a57-c435832853fe"
+  },
+  {
+    "id": "d4f0633e-1193-4b14-89e3-0cee7dd32618",
+    "type": "dividend",
+    "transactionDate": "2025-06-23",
+    "quantity": "1.0000",
+    "price": "168.0000",
+    "fees": "0.0000",
+    "notes": null,
+    "createdAt": "2026-02-04T11:55:10.915Z",
+    "updatedAt": "2026-02-04T11:55:10.915Z",
+    "AccountId": "7606f3b0-2289-4546-b601-2f0df5efa60b",
+    "InstrumentId": "feda88d2-c11e-43d6-9a57-c435832853fe"
+  }
+]

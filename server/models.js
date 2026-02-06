@@ -12,7 +12,7 @@ const Account = sequelize.define('Account', {
         allowNull: false,
     },
     type: {
-        type: DataTypes.ENUM('bank', 'demat', 'pf', 'cash', 'creditcard', 'loan'),
+        type: DataTypes.ENUM('bank', 'demat', 'pf', 'cash', 'creditcard', 'loan', 'ppf', 'ssy'),
         allowNull: false,
     },
     institution: {
@@ -30,6 +30,10 @@ const Account = sequelize.define('Account', {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
     },
+    isArchived: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+    },
     displayOrder: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
@@ -41,6 +45,10 @@ const Account = sequelize.define('Account', {
     openingBalanceDate: {
         type: DataTypes.DATEONLY,
         allowNull: true,
+    },
+    UserId: {
+        type: DataTypes.UUID,
+        allowNull: false
     }
 });
 
@@ -65,6 +73,10 @@ const Instrument = sequelize.define('Instrument', {
     type: {
         type: DataTypes.ENUM('stock', 'etf', 'fd', 'cash', 'mf'),
         allowNull: false,
+    },
+    UserId: {
+        type: DataTypes.UUID,
+        allowNull: true // Allow shared instruments or user-specific ones
     }
 });
 
@@ -75,7 +87,7 @@ const Transaction = sequelize.define('Transaction', {
         primaryKey: true,
     },
     type: {
-        type: DataTypes.ENUM('buy', 'sell', 'transfer_in', 'transfer_out', 'dividend', 'split', 'bonus', 'deposit', 'withdrawal'),
+        type: DataTypes.ENUM('buy', 'sell', 'transfer_in', 'transfer_out', 'dividend', 'split', 'bonus', 'deposit', 'withdrawal', 'demerger', 'resulting'),
         allowNull: false,
     },
     transactionDate: {
@@ -96,6 +108,10 @@ const Transaction = sequelize.define('Transaction', {
     },
     notes: {
         type: DataTypes.TEXT,
+    },
+    UserId: {
+        type: DataTypes.UUID,
+        allowNull: false
     }
 });
 
@@ -140,6 +156,10 @@ const CashflowCategory = sequelize.define('CashflowCategory', {
     displayOrder: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
+    },
+    UserId: {
+        type: DataTypes.UUID,
+        allowNull: false
     }
 });
 
@@ -188,6 +208,10 @@ const CashflowTransaction = sequelize.define('CashflowTransaction', {
     scrip: {
         type: DataTypes.STRING,
         allowNull: true,
+    },
+    UserId: {
+        type: DataTypes.UUID,
+        allowNull: false
     }
 });
 
@@ -238,6 +262,169 @@ const FixedDeposit = sequelize.define('FixedDeposit', {
     compoundingFrequency: {
         type: DataTypes.ENUM('Monthly', 'Quarterly', 'Half-Yearly', 'Yearly'),
         defaultValue: 'Quarterly'
+    },
+    // Linkage to cashflow transaction (when money left bank account)
+    cashflowTransactionId: {
+        type: DataTypes.UUID,
+        allowNull: true
+    },
+    // Linkage to accounting journal entry
+    journalEntryId: {
+        type: DataTypes.UUID,
+        allowNull: true
+    },
+    // Source bank account (for accounting)
+    sourceAccountId: {
+        type: DataTypes.UUID,
+        allowNull: true
+    },
+    UserId: {
+        type: DataTypes.UUID,
+        allowNull: false
+    }
+});
+
+const LedgerAccount = sequelize.define('LedgerAccount', {
+    id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+    },
+    name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    type: {
+        type: DataTypes.ENUM('Asset', 'Liability', 'Equity', 'Revenue', 'Expense'),
+        allowNull: false,
+    },
+    subType: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    parentId: {
+        type: DataTypes.UUID,
+        allowNull: true,
+    },
+    linkedId: {
+        type: DataTypes.UUID,
+        allowNull: true,
+    },
+    linkedType: {
+        type: DataTypes.STRING, // 'Account', 'CashflowCategory'
+        allowNull: true,
+    },
+    UserId: {
+        type: DataTypes.UUID,
+        allowNull: false
+    }
+});
+
+const JournalEntry = sequelize.define('JournalEntry', {
+    id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+    },
+    transactionDate: {
+        type: DataTypes.DATEONLY,
+        allowNull: false,
+    },
+    description: {
+        type: DataTypes.TEXT,
+    },
+    referenceId: {
+        type: DataTypes.UUID,
+        allowNull: true,
+    },
+    referenceType: {
+        type: DataTypes.STRING, // 'CashflowTransaction', 'StockBuy', etc.
+        allowNull: true,
+    },
+    UserId: {
+        type: DataTypes.UUID,
+        allowNull: false
+    }
+});
+
+const LedgerPosting = sequelize.define('LedgerPosting', {
+    id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+    },
+    debit: {
+        type: DataTypes.DECIMAL(20, 2),
+        defaultValue: 0,
+    },
+    credit: {
+        type: DataTypes.DECIMAL(20, 2),
+        defaultValue: 0,
+    },
+    UserId: {
+        type: DataTypes.UUID,
+        allowNull: false
+    }
+});
+
+const InstrumentInterestRate = sequelize.define('InstrumentInterestRate', {
+    id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+    },
+    instrumentType: {
+        type: DataTypes.STRING, // 'pf', 'ppf', 'ssy'
+        allowNull: false,
+    },
+    rate: {
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: false,
+    },
+    effectiveFrom: {
+        type: DataTypes.DATEONLY,
+        allowNull: false,
+    },
+    effectiveTo: {
+        type: DataTypes.DATEONLY,
+        allowNull: true,
+    },
+    UserId: {
+        type: DataTypes.UUID,
+        allowNull: false
+    }
+});
+
+const User = sequelize.define('User', {
+    id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+    },
+    email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+        validate: {
+            isEmail: true
+        }
+    },
+    password: {
+        type: DataTypes.STRING,
+        allowNull: true, // Null for Google SSO users
+    },
+    googleId: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: true
+    },
+    twoFactorSecret: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    isTwoFactorEnabled: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
     }
 });
 
@@ -258,4 +445,50 @@ CashflowTransaction.belongsTo(Account);
 CashflowCategory.hasMany(CashflowTransaction);
 CashflowTransaction.belongsTo(CashflowCategory, { foreignKey: { allowNull: true } });
 
-module.exports = { Account, Instrument, Transaction, PriceHistory, FixedDeposit, CashflowCategory, CashflowTransaction, sequelize };
+// Accounting Relationships
+LedgerAccount.hasMany(LedgerAccount, { as: 'SubAccounts', foreignKey: 'parentId' });
+LedgerAccount.belongsTo(LedgerAccount, { as: 'ParentAccount', foreignKey: 'parentId' });
+
+JournalEntry.hasMany(LedgerPosting, { foreignKey: 'journalEntryId' });
+LedgerPosting.belongsTo(JournalEntry, { foreignKey: 'journalEntryId' });
+
+LedgerAccount.hasMany(LedgerPosting, { foreignKey: 'ledgerAccountId' });
+LedgerPosting.belongsTo(LedgerAccount, { foreignKey: 'ledgerAccountId' });
+
+User.hasMany(Account);
+User.hasMany(Instrument);
+User.hasMany(Transaction);
+User.hasMany(CashflowCategory);
+User.hasMany(CashflowTransaction);
+User.hasMany(FixedDeposit);
+User.hasMany(LedgerAccount);
+User.hasMany(JournalEntry);
+User.hasMany(LedgerPosting);
+User.hasMany(InstrumentInterestRate);
+
+Account.belongsTo(User);
+Instrument.belongsTo(User);
+Transaction.belongsTo(User);
+CashflowCategory.belongsTo(User);
+CashflowTransaction.belongsTo(User);
+FixedDeposit.belongsTo(User);
+LedgerAccount.belongsTo(User);
+JournalEntry.belongsTo(User);
+LedgerPosting.belongsTo(User);
+InstrumentInterestRate.belongsTo(User);
+
+module.exports = {
+    User,
+    Account,
+    Instrument,
+    Transaction,
+    PriceHistory,
+    FixedDeposit,
+    CashflowCategory,
+    CashflowTransaction,
+    LedgerAccount,
+    JournalEntry,
+    LedgerPosting,
+    InstrumentInterestRate,
+    sequelize
+};

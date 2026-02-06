@@ -1,0 +1,133 @@
+ICICI: 12ac98e6-8c1a-435a-a307-501939be9d6d
+Sharekhan: 7606f3b0-2289-4546-b601-2f0df5efa60b
+Zerodha: 17bf3c9e-da15-4c1d-9de6-56f4269d8687
+
+Found 86 potential matching transactions in ICICI:
+[2025-04-05] From Sharekhan | Amt: 54.75 | Type: income | Cat: Stock Refund | Scrip: null
+[2025-04-17] ITCHOTELS | Amt: 65.15 | Type: income | Cat: Dividend | Scrip: ITCHOTELS
+[2025-05-06] To Sharekhan | Amt: 100000.00 | Type: expense | Cat: HR-Stocks-Sharekhan | Scrip: null
+[2025-05-09] To Zerodha | Amt: 300.00 | Type: expense | Cat: Other Expenses | Scrip: null
+[2025-05-13] To Zerodha | Amt: 1500.00 | Type: expense | Cat: HR-Shloka Stocks | Scrip: null
+[2025-05-22] To Sharekhan | Amt: 20000.00 | Type: expense | Cat: HR-Stocks-Sharekhan | Scrip: null
+[2025-05-23] To Sharekhan | Amt: 300.00 | Type: expense | Cat: HR-Stocks-Sharekhan | Scrip: null
+[2025-05-23] COFORGE | Amt: 19.00 | Type: income | Cat: Dividend | Scrip: COFORGE
+[2025-05-26] BAJFINANCE | Amt: 12.00 | Type: income | Cat: Dividend | Scrip: BAJFINANCE
+[2025-05-27] From Guitar Class (Shloka) | Amt: 71.00 | Type: expense | Cat: Transportation | Scrip: null
+[2025-05-27] To Guitar Class (Shloka) | Amt: 76.00 | Type: expense | Cat: Transportation | Scrip: null
+[2025-06-03] LTIM | Amt: 90.00 | Type: income | Cat: Dividend | Scrip: LTIM
+[2025-06-10] PAGEIND | Amt: 400.00 | Type: income | Cat: Dividend | Scrip: PAGEIND
+[2025-06-21] TATACONSUM | Amt: 99.00 | Type: income | Cat: Dividend | Scrip: TATACONSUM
+[2025-06-21] LT | Amt: 68.00 | Type: income | Cat: Dividend | Scrip: LT
+[2025-06-23] TMPV | Amt: 168.00 | Type: income | Cat: Dividend | Scrip: TMPV
+[2025-06-23] HAVELLS | Amt: 132.00 | Type: income | Cat: Dividend | Scrip: HAVELLS
+[2025-06-24] TCS | Amt: 540.00 | Type: income | Cat: Dividend | Scrip: TCS
+[2025-06-27] HINDUNILVR | Amt: 36.00 | Type: income | Cat: Dividend | Scrip: HINDUNILVR
+[2025-07-01] POLYCAB | Amt: 70.00 | Type: income | Cat: Dividend | Scrip: POLYCAB
+[2025-07-04] HINDUNILVR | Amt: 720.00 | Type: income | Cat: Dividend | Scrip: HINDUNILVR
+[2025-07-05] From Sharekhan | Amt: 10.06 | Type: income | Cat: Stock Refund | Scrip: null
+[2025-07-05] From Zerodha | Amt: 3.05 | Type: income | Cat: Stock Refund | Scrip: null
+[2025-07-06] Trendz (Shloka's Haircut) | Amt: 560.00 | Type: expense | Cat: Shloka | Scrip: null
+[2025-07-07] TATAPOWER | Amt: 29.25 | Type: income | Cat: Dividend | Scrip: TATAPOWER
+[2025-07-09] To Shloka PhonePe Wallet | Amt: 100.00 | Type: expense | Cat: Shloka | Scrip: null
+[2025-07-25] BAJFINANCE | Amt: 44.00 | Type: income | Cat: Dividend | Scrip: BAJFINANCE
+[2025-07-25] TITAN | Amt: 198.00 | Type: income | Cat: Dividend | Scrip: TITAN
+[2025-07-29] BALKRISIND | Amt: 8.00 | Type: income | Cat: Dividend | Scrip: BALKRISIND
+[2025-07-30] ITC | Amt: 1758.00 | Type: income | Cat: Dividend | Scrip: ITC
+[2025-08-01] Shloka |Wallet | Amt: 350.00 | Type: expense | Cat: Shloka | Scrip: null
+[2025-08-01] Shloka RBL | Amt: 350.00 | Type: expense | Cat: Shloka | Scrip: null
+[2025-08-04] TCS | Amt: 198.00 | Type: income | Cat: Dividend | Scrip: TCS
+[2025-08-11] Zerodha AMC | Amt: 100.00 | Type: expense | Cat: HR-Stocks-Zerodha | Scrip: null
+[2025-08-11] BHARTIARTL | Amt: 16.00 | Type: income | Cat: Dividend | Scrip: BHARTIARTL
+[2025-08-11] HDFCBANK | Amt: 280.00 | Type: income | Cat: Dividend | Scrip: HDFCBANK
+[2025-08-11] HDFCBANK | Amt: 1232.00 | Type: income | Cat: Dividend | Scrip: HDFCBANK
+[2025-08-12] Auto from IISC to Home (Shloka) | Amt: 147.00 | Type: expense | Cat: Shloka | Scrip: null
+[2025-08-12] BALKRISIND | Amt: 8.00 | Type: income | Cat: Dividend | Scrip: BALKRISIND
+[2025-08-13] SONATSOFTW | Amt: 52.80 | Type: income | Cat: Dividend | Scrip: SONATSOFTW
+[2025-08-14] KPITTECH | Amt: 30.00 | Type: income | Cat: Dividend | Scrip: KPITTECH
+[2025-08-19] COFORGE | Amt: 20.00 | Type: income | Cat: Dividend | Scrip: COFORGE
+[2025-08-26] SONATSOFTW | Amt: 15.00 | Type: income | Cat: Dividend | Scrip: SONATSOFTW
+[2025-09-01] Aditi Mallya (Shloka Exam Fees) | Amt: 26500.00 | Type: expense | Cat: Shloka | Scrip: null
+[2025-09-01] GODREJCP | Amt: 85.00 | Type: income | Cat: Dividend | Scrip: GODREJCP
+[2025-09-02] PAGEIND | Amt: 300.00 | Type: income | Cat: Dividend | Scrip: PAGEIND
+[2025-09-02] DATAPATTNS | Amt: 7.90 | Type: income | Cat: Dividend | Scrip: DATAPATTNS
+[2025-09-03] PARAS | Amt: 5.00 | Type: income | Cat: Dividend | Scrip: PARAS
+[2025-09-10] ASTRAL | Amt: 128.25 | Type: income | Cat: Dividend | Scrip: ASTRAL
+[2025-09-11] RPTECH | Amt: 38.00 | Type: income | Cat: Dividend | Scrip: RPTECH
+[2025-09-14] Zerodha | Amt: 11.50 | Type: income | Cat: Stock Refund | Scrip: null
+[2025-09-18] GABRIEL | Amt: 259.60 | Type: income | Cat: Dividend | Scrip: GABRIEL
+[2025-09-23] RELAXO | Amt: 6.00 | Type: income | Cat: Dividend | Scrip: RELAXO
+[2025-09-23] Shloka Jio regharge | Amt: 189.00 | Type: expense | Cat: Telephone & Internet | Scrip: null
+[2025-10-01] To Shloka | Amt: 1500.00 | Type: expense | Cat: Shloka | Scrip: null
+[2025-10-01] CANTABIL | Amt: 2.00 | Type: income | Cat: Dividend | Scrip: CANTABIL
+[2025-10-07] DIXON | Amt: 16.00 | Type: income | Cat: Dividend | Scrip: DIXON
+[2025-10-09] To Sharekhan | Amt: 40000.00 | Type: expense | Cat: HR-Stocks-Sharekhan | Scrip: null
+[2025-11-04] TCS | Amt: 209.00 | Type: income | Cat: Dividend | Scrip: TCS
+[2025-11-04] Shloka's English book (Blue dart) | Amt: 1460.00 | Type: expense | Cat: Shloka | Scrip: null
+[2025-11-04] To Zerodha | Amt: 500.00 | Type: expense | Cat: HR-Stocks-Zerodha | Scrip: null
+[2025-11-06] LTIM | Amt: 44.00 | Type: income | Cat: Dividend | Scrip: LTIM
+[2025-11-08] Zerodha Refund | Amt: 57.50 | Type: income | Cat: Stock Refund | Scrip: null
+[2025-11-17] To Zerodha | Amt: 20000.00 | Type: expense | Cat: HR-Stocks-Zerodha | Scrip: null
+[2025-11-18] BALKRISIND | Amt: 8.00 | Type: income | Cat: Dividend | Scrip: BALKRISIND
+[2025-11-18] to Sharekhan | Amt: 7000.00 | Type: expense | Cat: HR-Stocks-Sharekhan | Scrip: null
+[2025-11-18] COFORGE | Amt: 28.00 | Type: income | Cat: Dividend | Scrip: COFORGE
+[2025-11-20] HINDUNILVR | Amt: 570.00 | Type: income | Cat: Dividend | Scrip: HINDUNILVR
+[2025-11-20] To Sharekhan | Amt: 10570.00 | Type: expense | Cat: HR-Stocks-Sharekhan | Scrip: null
+[2025-11-24] GODREJCP | Amt: 85.00 | Type: income | Cat: Dividend | Scrip: GODREJCP
+[2025-11-24] To Zerodha | Amt: 12600.00 | Type: expense | Cat: HR-Stocks-Zerodha | Scrip: null
+[2025-11-27] ASIANPAINT | Amt: 158.00 | Type: income | Cat: Dividend | Scrip: ASIANPAINT
+[2025-11-28] To Zerodha (Shloka) | Amt: 6000.00 | Type: expense | Cat: HR-Shloka Stocks | Scrip: null
+[2025-11-28] From Shloka | Amt: 5950.00 | Type: income | Cat: Transfers (Family) | Scrip: null
+[2025-12-02] ASTRAL | Amt: 85.50 | Type: income | Cat: Dividend | Scrip: ASTRAL
+[2025-12-04] SONATSOFTW | Amt: 15.00 | Type: income | Cat: Dividend | Scrip: SONATSOFTW
+[2025-12-05] GABRIEL | Amt: 167.20 | Type: income | Cat: Dividend | Scrip: GABRIEL
+[2025-12-09] PAGEIND | Amt: 250.00 | Type: income | Cat: Dividend | Scrip: PAGEIND
+[2025-12-11] Shloka's dress for Vaani akka's daughter's wedding) | Amt: 2300.00 | Type: expense | Cat: Shloka | Scrip: null
+[2026-01-03] From Zerodha | Amt: 105.30 | Type: income | Cat: Stock Refund | Scrip: null
+[2026-01-06] To Zerodha | Amt: 1000.00 | Type: expense | Cat: HR-Shloka Stocks | Scrip: null
+[2026-01-19] To Sharekhan | Amt: 10000.00 | Type: expense | Cat: HR-Stocks-Sharekhan | Scrip: null
+[2026-01-20] To Sharekhan | Amt: 3000.00 | Type: expense | Cat: HR-Stocks-Sharekhan | Scrip: null
+[2026-01-22] To Sharekhan | Amt: 5000.00 | Type: expense | Cat: HR-Stocks-Sharekhan | Scrip: null
+[2026-01-30] To Mallya Aditi (Shloka's Exam Fees) | Amt: 56000.00 | Type: expense | Cat: Shloka | Scrip: null
+[2026-02-03] TCS | Amt: 1083.00 | Type: income | Cat: Dividend | Scrip: TCS
+
+Found 40 total Shloka related transactions:
+[2025-04-02] To Latha (ICICI) to Shloka | Amt: 3000.00 | Account: Kotak Salary
+[2025-04-27] Jio Prepaod (Shloka) | Amt: 100.00 | Account: Kotak Spendz
+[2025-04-29] Chocolate for Shloka @ Shell petrol bunk, Yelahanka | Amt: 135.00 | Account: Kotak Spendz
+[2025-05-27] To Guitar Class (Shloka) | Amt: 76.00 | Account: ICICI
+[2025-05-27] From Guitar Class (Shloka) | Amt: 71.00 | Account: ICICI
+[2025-05-29] Jio (Shloka) | Amt: 189.00 | Account: Kotak Spendz
+[2025-06-01] To Shloka | Amt: 1500.00 | Account: Cash
+[2025-06-27] Shloka (Jio Recharge) | Amt: 189.00 | Account: Kotak Spendz
+[2025-07-01] To Shloka | Amt: 200.00 | Account: Cash
+[2025-07-05] Decathalaon (Raincoat for Shloka) | Amt: 699.00 | Account: Kotak Spendz
+[2025-07-06] Trendz (Shloka's Haircut) | Amt: 560.00 | Account: ICICI
+[2025-07-09] To Shloka PhonePe Wallet | Amt: 100.00 | Account: ICICI
+[2025-07-27] Shloka Jio Recharge | Amt: 189.00 | Account: Kotak Spendz
+[2025-08-01] Shloka RBL | Amt: 350.00 | Account: ICICI
+[2025-08-09] Tfr to Shloka | Amt: 500.00 | Account: Kotak 811
+[2025-08-01] Shloka |Wallet | Amt: 350.00 | Account: ICICI
+[2025-08-12] Auto from IISC to Home (Shloka) | Amt: 147.00 | Account: ICICI
+[2025-08-24] Shloka Mobile recharge | Amt: 189.00 | Account: Kotak Spendz
+[2025-09-01] Aditi Mallya (Shloka Exam Fees) | Amt: 26500.00 | Account: ICICI
+[2025-09-01] To Shloka | Amt: 2000.00 | Account: Kotak 811
+[2025-09-23] Shloka Jio regharge | Amt: 189.00 | Account: ICICI
+[2025-10-01] To Shloka | Amt: 1500.00 | Account: ICICI
+[2025-10-21] To Shloka, Jio recharge | Amt: 189.00 | Account: IPPB
+[2025-11-04] Shloka's English book (Blue dart) | Amt: 1460.00 | Account: ICICI
+[2025-11-17] Shloka's mobile recharge | Amt: 189.00 | Account: IPPB
+[2025-11-28] From Shloka | Amt: 5950.00 | Account: ICICI
+[2025-11-28] To Zerodha (Shloka) | Amt: 6000.00 | Account: ICICI
+[2025-11-29] Bus & Metro from Home to VITM and back with Shloka | Amt: 248.00 | Account: IPPB
+[2025-12-11] Shloka's dress for Vaani akka's daughter's wedding) | Amt: 2300.00 | Account: ICICI
+[2025-12-30] Mentro for Shloka and I to Chamarajapet | Amt: 80.00 | Account: Kotak 811
+[2025-12-30] Mentro for Shloka and I to  Sandal Soap | Amt: 80.00 | Account: Kotak 811
+[2025-12-06] Jockey for Shloka | Amt: 2157.00 | Account: IPPB
+[2025-12-06] Books for Shloka | Amt: 260.00 | Account: IPPB
+[2025-12-10] Inductors for Shloka | Amt: 224.00 | Account: IPPB
+[2025-12-17] Shloka's Jio recharge | Amt: 189.00 | Account: IPPB
+[2026-01-03] To Shloka | Amt: 500.00 | Account: Cash
+[2026-01-30] To Mallya Aditi (Shloka's Exam Fees) | Amt: 56000.00 | Account: ICICI
+[2026-01-15] Shloka mobile recharge | Amt: 349.00 | Account: IPPB
+[2026-01-23] Stationery for Shloka | Amt: 156.00 | Account: IPPB
+[2026-02-01] To Shloka | Amt: 500.00 | Account: Cash

@@ -1,15 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const { Transaction, Instrument, Account } = require('../models');
+const { Transaction, Instrument, Account, sequelize } = require('../models');
 const priceService = require('../priceService');
 const xirr = require('xirr');
+const { authenticateToken } = require('./auth');
 
-router.get('/', async (req, res) => {
+router.get('/', authenticateToken, async (req, res) => {
     try {
         const { category, accountId } = req.query;
 
         // Build Account filter: exclude family accounts from "ALL" view
-        let accountWhere = {};
+        let accountWhere = { UserId: req.user.id };
         if (accountId) {
             accountWhere.id = accountId;
         } else {
@@ -18,6 +19,7 @@ router.get('/', async (req, res) => {
         }
 
         const queryOptions = {
+            where: { UserId: req.user.id },
             include: [
                 {
                     model: Instrument,
@@ -31,7 +33,34 @@ router.get('/', async (req, res) => {
             order: [['transactionDate', 'ASC']]
         };
 
-        const transactions = await Transaction.findAll(queryOptions);
+        let transactions = await Transaction.findAll(queryOptions);
+
+        // Custom Sort: Within the same date, process Corporate Actions (Split/Bonus/Demerger) FIRST.
+        // This ensures they apply to the *opening balance* of that day, not including intraday buys.
+        const typePriority = {
+            'split': 1,
+            'bonus': 1,
+            'demerger': 1,
+            'buy': 2,
+            'sell': 2,
+            'transfer_in': 2,
+            'transfer_out': 2,
+            'dividend': 2,
+            'deposit': 2,
+            'withdrawal': 2,
+            'demerger': 1,
+            'resulting': 2
+        };
+
+        transactions.sort((a, b) => {
+            const dateA = new Date(a.transactionDate).getTime();
+            const dateB = new Date(b.transactionDate).getTime();
+            if (dateA !== dateB) return dateA - dateB;
+
+            const priorityA = typePriority[a.type] || 3;
+            const priorityB = typePriority[b.type] || 3;
+            return priorityA - priorityB;
+        });
 
         const holdings = {};
 
@@ -54,7 +83,7 @@ router.get('/', async (req, res) => {
             const qty = parseFloat(t.quantity);
             const price = parseFloat(t.price);
 
-            if (t.type === 'buy' || t.type === 'transfer_in' || t.type === 'bonus' || t.type === 'split') {
+            if (t.type === 'buy' || t.type === 'transfer_in' || t.type === 'bonus' || t.type === 'split' || t.type === 'demerger' || t.type === 'resulting') {
                 if (t.type === 'split') {
                     // split: quantity acts as a multiplier (e.g. 5 means 1 becomes 5)
                     // Price usually adjusts inversely, but here we just track holdings.
@@ -63,11 +92,17 @@ router.get('/', async (req, res) => {
                 } else if (t.type === 'bonus') {
                     // bonus: quantity acts as ratio (e.g. 1 means 1:1, so we add 1*currentQty)
                     h.quantity = h.quantity + (h.quantity * qty);
+                } else if (t.type === 'demerger') {
+                    // demerger: quantity acts as "Cost Retention Ratio" (e.g. 0.4 means 40% cost retained)
+                    // Reduces the Total Cost of the holding. Quantity remains same.
+                    // Avg price reduces automatically.
+                    h.totalCost = h.totalCost * qty;
                 } else {
                     if (h.quantity === 0) {
                         h.firstBuyDate = t.transactionDate;
                     }
                     h.quantity += qty;
+                    // Resulting company entry is treated exactly like a buy, cost is cost of acquisition
                     h.totalCost += (qty * price);
                     h.cashFlows.push({ amount: -1 * (qty * price), when: new Date(t.transactionDate) });
                 }

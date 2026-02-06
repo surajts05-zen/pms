@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import FixedDeposits from './pages/FixedDeposits';
+import GovtSchemes from './pages/GovtSchemes';
 import Cashflow from './pages/Cashflow';
 import Categories from './pages/Categories';
 import Dividends from './pages/Dividends';
+import ChartOfAccounts from './pages/ChartOfAccounts';
+import AccountingJournals from './pages/AccountingJournals';
+import ProfitLoss from './pages/ProfitLoss';
+import BalanceSheet from './pages/BalanceSheet';
 import Settings from './pages/Settings';
+import Login from './pages/Login';
 import {
     TrendingUp,
     Plus,
@@ -17,6 +23,10 @@ import {
     Wallet,
     Tags,
     DollarSign,
+    BookOpen,
+    Layers,
+    Info,
+    Lock,
     Settings as SettingsIcon
 } from 'lucide-react';
 import {
@@ -32,11 +42,8 @@ import {
     Cell
 } from 'recharts';
 import axios from 'axios';
+import api from './services/api';
 import { formatIndianRupee, formatIndianRupeeInt } from './utils/formatCurrency';
-
-const api = axios.create({
-    baseURL: 'http://localhost:5000/api'
-});
 
 const mockData = [
     { date: '2023-08', value: 1250000 },
@@ -54,6 +61,30 @@ const allocationData = [
 ];
 
 function App() {
+    const [user, setUser] = useState(() => {
+        const savedUser = localStorage.getItem('user');
+        return savedUser ? JSON.parse(savedUser) : null;
+    });
+    const [token, setToken] = useState(() => localStorage.getItem('token'));
+
+    const handleLoginSuccess = (newToken, newUser) => {
+        setToken(newToken);
+        setUser(newUser);
+        localStorage.setItem('token', newToken);
+        localStorage.setItem('user', JSON.stringify(newUser));
+    };
+
+    const handleLogout = () => {
+        setToken(null);
+        setUser(null);
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+    };
+
+    if (!user) {
+        return <Login onLoginSuccess={handleLoginSuccess} />;
+    }
+
     const [activeTab, setActiveTab] = useState('summary');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [accounts, setAccounts] = useState([]);
@@ -65,6 +96,15 @@ function App() {
     const [loading, setLoading] = useState(false);
     const [editingAccount, setEditingAccount] = useState(null);
     const [draggedAccountId, setDraggedAccountId] = useState(null);
+    const [showArchived, setShowArchived] = useState(false);
+    const [dashboardSummary, setDashboardSummary] = useState({
+        bankBalance: 0,
+        fdTotal: 0,
+        pfTotal: 0,
+        ppfTotal: 0,
+        ssyTotal: 0,
+        monthlyDividends: 0
+    });
 
     const [formData, setFormData] = useState({
         accountId: '',
@@ -98,20 +138,24 @@ function App() {
 
     useEffect(() => {
         fetchInitialData();
+        const interval = setInterval(fetchInitialData, 300000); // refresh every 5 mins
+        return () => clearInterval(interval);
     }, [isModalOpen, activeTab, portfolioFilter]);
 
     const fetchInitialData = async () => {
         try {
-            const [accRes, insRes, traRes] = await Promise.all([
+            const [accRes, insRes, traRes, dashRes] = await Promise.all([
                 api.get('/accounts'),
                 api.get('/instruments'),
-                api.get('/transactions')
+                api.get('/transactions'),
+                api.get('/dashboard/summary')
             ]);
 
             const fetchedAccounts = accRes.data;
             setAccounts(fetchedAccounts);
             setInstruments(insRes.data);
             setTransactions(traRes.data);
+            setDashboardSummary(dashRes.data);
 
             if (activeTab === 'portfolio' || activeTab === 'summary') {
                 let params = {};
@@ -154,7 +198,28 @@ function App() {
             await api.delete(`/accounts/${id}`);
             fetchInitialData();
         } catch (err) {
-            alert('Delete failed: ' + err.message);
+            if (err.response && err.response.status === 409 && err.response.data.canArchive) {
+                if (window.confirm(`${err.response.data.error}\n\n${err.response.data.details}\n\nDo you want to archive this account instead? Archived accounts are hidden from views but preserve history.`)) {
+                    try {
+                        await api.put(`/accounts/${id}`, { isArchived: true });
+                        alert('Account archived successfully.');
+                        fetchInitialData();
+                    } catch (archiveErr) {
+                        alert('Archive failed: ' + archiveErr.message);
+                    }
+                }
+            } else {
+                alert('Delete failed: ' + err.message);
+            }
+        }
+    };
+
+    const toggleArchiveStatus = async (account) => {
+        try {
+            await api.put(`/accounts/${account.id}`, { isArchived: !account.isArchived });
+            fetchInitialData();
+        } catch (err) {
+            alert('Update failed: ' + err.message);
         }
     };
 
@@ -222,8 +287,40 @@ function App() {
                 </div>
                 <div className="card">
                     <h3>Accounts</h3>
-                    <div className="value">{accounts.length}</div>
+                    <div className="value">{accounts.filter(a => !a.isArchived).length}</div>
                     <div className="change">{accounts.map(a => a.name).join(', ')}</div>
+                </div>
+                <div className="card">
+                    <h3>Bank & Cash</h3>
+                    <div className="value">{formatIndianRupee(dashboardSummary.bankBalance)}</div>
+                    <div className="change">Liquid balances</div>
+                </div>
+                <div className="card">
+                    <h3>Fixed Deposits</h3>
+                    <div className="value">{formatIndianRupee(dashboardSummary.fdTotal)}</div>
+                    <div className="change">Active FDs</div>
+                </div>
+                <div className="card">
+                    <h3>Monthly Dividends</h3>
+                    <div className="value">{formatIndianRupee(dashboardSummary.monthlyDividends)}</div>
+                    <div className={`change ${dashboardSummary.monthlyDividends > 0 ? 'up' : ''}`}>
+                        Current Month
+                    </div>
+                </div>
+                <div className="card">
+                    <h3>Provident Fund</h3>
+                    <div className="value">{formatIndianRupee(dashboardSummary.pfTotal)}</div>
+                    <div className="change">Employee PF</div>
+                </div>
+                <div className="card">
+                    <h3>PPF Balance</h3>
+                    <div className="value">{formatIndianRupee(dashboardSummary.ppfTotal)}</div>
+                    <div className="change">Public Provident Fund</div>
+                </div>
+                <div className="card">
+                    <h3>SSY Balance</h3>
+                    <div className="value">{formatIndianRupee(dashboardSummary.ssyTotal)}</div>
+                    <div className="change">Sukanya Samriddhi</div>
                 </div>
             </div>
 
@@ -307,7 +404,7 @@ function App() {
                     >
                         ALL
                     </button>
-                    {accounts.filter(acc => acc.type === 'demat').map(acc => {
+                    {accounts.filter(acc => acc.type === 'demat' && !acc.isArchived).map(acc => {
                         let label = acc.name.toUpperCase();
 
                         return (
@@ -371,8 +468,11 @@ function App() {
 
         return (
             <section className="journal-section">
-                <div className="header" style={{ marginBottom: '1.5rem' }}>
+                <div className="header" style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <h2>Stock Journal</h2>
+                    <button className="btn" onClick={() => setIsModalOpen(true)}>
+                        <Plus size={18} style={{ marginRight: '8px' }} /> Add Transaction
+                    </button>
                 </div>
                 <div className="table-container">
                     <table>
@@ -446,8 +546,17 @@ function App() {
 
     const renderAccounts = () => (
         <section className="journal-section">
-            <div className="header" style={{ marginBottom: '1.5rem' }}>
+            <div className="header" style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <h2>Manage Accounts</h2>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <input
+                        type="checkbox"
+                        id="showArchived"
+                        checked={showArchived}
+                        onChange={e => setShowArchived(e.target.checked)}
+                    />
+                    <label htmlFor="showArchived" style={{ cursor: 'pointer', userSelect: 'none' }}>Show Archived</label>
+                </div>
             </div>
 
             <div className="card" style={{ marginBottom: '2rem', padding: '1.5rem' }}>
@@ -462,6 +571,9 @@ function App() {
                         <select value={accountFormData.type} onChange={e => setAccountFormData({ ...accountFormData, type: e.target.value })}>
                             <option value="demat">Demat</option>
                             <option value="bank">Bank</option>
+                            <option value="pf">Provident Fund</option>
+                            <option value="ppf">PPF</option>
+                            <option value="ssy">Sukanya Samriddhi</option>
                             <option value="cash">Cash</option>
                             <option value="creditcard">Credit Card</option>
                             <option value="loan">Loan</option>
@@ -513,7 +625,7 @@ function App() {
                         </tr>
                     </thead>
                     <tbody>
-                        {accounts.map((acc, index) => (
+                        {accounts.filter(a => showArchived ? true : !a.isArchived).map((acc, index) => (
                             <tr
                                 key={acc.id}
                                 draggable
@@ -548,6 +660,9 @@ function App() {
                                 <td style={{ color: 'var(--text-muted)' }}>{acc.accountNumber || '-'}</td>
                                 <td>{acc.isFamily ? '✓' : ''}</td>
                                 <td style={{ display: 'flex', gap: '0.5rem' }}>
+                                    <button className="action-btn edit" title={acc.isArchived ? "Unarchive" : "Archive"} onClick={() => toggleArchiveStatus(acc)}>
+                                        <Layers size={16} />
+                                    </button>
                                     <button className="action-btn edit" title="Edit Account" onClick={() => {
                                         setEditingAccount(acc);
                                         setAccountFormData({
@@ -595,6 +710,9 @@ function App() {
                     <div className={`nav-item ${activeTab === 'fds' ? 'active' : ''}`} onClick={() => setActiveTab('fds')}>
                         <Landmark size={20} /> Fixed Deposits
                     </div>
+                    <div className={`nav-item ${activeTab === 'govt-schemes' ? 'active' : ''}`} onClick={() => setActiveTab('govt-schemes')}>
+                        <BookOpen size={20} /> Govt Schemes (PF/PPF)
+                    </div>
                     <div className={`nav-item ${activeTab === 'cashflow' ? 'active' : ''}`} onClick={() => setActiveTab('cashflow')}>
                         <Wallet size={20} /> Cashflow
                     </div>
@@ -604,16 +722,26 @@ function App() {
                     <div className={`nav-item ${activeTab === 'dividends' ? 'active' : ''}`} onClick={() => setActiveTab('dividends')}>
                         <DollarSign size={20} /> Dividends
                     </div>
+                    <div className={`nav-item ${activeTab === 'coa' ? 'active' : ''}`} onClick={() => setActiveTab('coa')}>
+                        <Layers size={20} /> Chart of Accounts
+                    </div>
+                    <div className={`nav-item ${activeTab === 'journals' ? 'active' : ''}`} onClick={() => setActiveTab('journals')}>
+                        <BookOpen size={20} /> Journals
+                    </div>
+                    <div className={`nav-item ${activeTab === 'profit-loss' ? 'active' : ''}`} onClick={() => setActiveTab('profit-loss')}>
+                        <TrendingUp size={20} /> Profit & Loss
+                    </div>
+                    <div className={`nav-item ${activeTab === 'balance-sheet' ? 'active' : ''}`} onClick={() => setActiveTab('balance-sheet')}>
+                        <PieChart size={20} /> Balance Sheet
+                    </div>
                     <div className={`nav-item ${activeTab === 'settings' ? 'active' : ''}`} onClick={() => setActiveTab('settings')}>
                         <SettingsIcon size={20} /> Settings
                     </div>
+                    <div className="nav-item" onClick={handleLogout} style={{ marginTop: 'auto', borderTop: '1px solid #30363d' }}>
+                        <Lock size={20} /> Logout
+                    </div>
                 </nav>
 
-                <div style={{ marginTop: 'auto' }}>
-                    <button className="btn" style={{ width: '100%' }} onClick={() => setIsModalOpen(true)}>
-                        <Plus size={18} style={{ marginRight: '8px' }} /> Add Transaction
-                    </button>
-                </div>
             </aside>
 
             <main className="main-content">
@@ -629,9 +757,14 @@ function App() {
                 {activeTab === 'journal' && renderJournal()}
                 {activeTab === 'accounts' && renderAccounts()}
                 {activeTab === 'fds' && <FixedDeposits />}
+                {activeTab === 'govt-schemes' && <GovtSchemes />}
                 {activeTab === 'cashflow' && <Cashflow />}
                 {activeTab === 'categories' && <Categories />}
                 {activeTab === 'dividends' && <Dividends />}
+                {activeTab === 'coa' && <ChartOfAccounts />}
+                {activeTab === 'journals' && <AccountingJournals />}
+                {activeTab === 'profit-loss' && <ProfitLoss />}
+                {activeTab === 'balance-sheet' && <BalanceSheet />}
                 {activeTab === 'settings' && <Settings />}
             </main>
 
@@ -644,7 +777,7 @@ function App() {
                                 <label>Account</label>
                                 <select value={formData.accountId} onChange={e => setFormData({ ...formData, accountId: e.target.value })} required>
                                     <option value="">Select Account</option>
-                                    {accounts.map(acc => <option key={acc.id} value={acc.id}>{acc.name}</option>)}
+                                    {accounts.filter(a => !a.isArchived).map(acc => <option key={acc.id} value={acc.id}>{acc.name}</option>)}
                                 </select>
                             </div>
                             <div className="form-group">
@@ -658,7 +791,7 @@ function App() {
                                 <div className="form-group">
                                     <label>Type</label>
                                     <select value={formData.type} onChange={e => setFormData({ ...formData, type: e.target.value })}>
-                                        {['buy', 'sell', 'transfer_in', 'transfer_out', 'deposit', 'withdrawal', 'dividend', 'bonus', 'split'].map(t => (
+                                        {['buy', 'sell', 'transfer_in', 'transfer_out', 'deposit', 'withdrawal', 'dividend', 'bonus', 'split', 'demerger', 'resulting'].map(t => (
                                             <option key={t} value={t}>{t.replace('_', ' ').toUpperCase()}</option>
                                         ))}
                                     </select>
@@ -668,6 +801,18 @@ function App() {
                                     <input type="date" value={formData.transactionDate} onChange={e => setFormData({ ...formData, transactionDate: e.target.value })} required />
                                 </div>
                             </div>
+
+                            {['split', 'bonus', 'demerger', 'resulting'].includes(formData.type) && (
+                                <div style={{ background: 'rgba(99, 102, 241, 0.1)', padding: '0.75rem', borderRadius: '0.5rem', marginBottom: '1rem', borderLeft: '3px solid var(--accent)', display: 'flex', gap: '0.5rem', alignItems: 'start' }}>
+                                    <Info size={16} style={{ marginTop: '2px', color: 'var(--accent)' }} />
+                                    <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+                                        {formData.type === 'split' && "Enter ratio (e.g., 1:10 for 1 share becoming 10). Quantity will be multiplied."}
+                                        {formData.type === 'bonus' && "Enter ratio (e.g., 1:1 for 1 bonus share per 1 held). Quantity will be added."}
+                                        {formData.type === 'demerger' && "Enter Cost Retention Ratio (e.g., 0.6 or 60%). The original cost of holding will be reduced by this ratio."}
+                                        {formData.type === 'resulting' && "Enter Quantity received and derived Cost per share (Cost of Acquisition). Treated as a Buy."}
+                                    </div>
+                                </div>
+                            )}
                             <div className="form-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                                 <div className="form-group">
                                     <label>Quantity</label>

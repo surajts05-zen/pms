@@ -1,0 +1,622 @@
+[
+  {
+    "id": "95da72ca-e3b6-47b4-b0b4-a2f0dad2380f",
+    "name": "Salary",
+    "type": "income",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 1,
+    "createdAt": "2026-02-04T14:58:19.034Z",
+    "updatedAt": "2026-02-04T14:58:19.034Z"
+  },
+  {
+    "id": "ffddd75b-76a5-4a36-8d24-23e7ad6df83b",
+    "name": "Bonus",
+    "type": "income",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 2,
+    "createdAt": "2026-02-04T14:58:19.034Z",
+    "updatedAt": "2026-02-04T14:58:19.034Z"
+  },
+  {
+    "id": "20ecdf9c-a7d5-4d67-944e-c96cc1635570",
+    "name": "Interest",
+    "type": "income",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 3,
+    "createdAt": "2026-02-04T14:58:19.034Z",
+    "updatedAt": "2026-02-04T14:58:19.034Z"
+  },
+  {
+    "id": "95bc9ba0-eba5-4ad5-8c08-adce7660710f",
+    "name": "Dividend",
+    "type": "income",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 4,
+    "createdAt": "2026-02-04T14:58:19.034Z",
+    "updatedAt": "2026-02-04T14:58:19.034Z"
+  },
+  {
+    "id": "6f3dd82c-294a-439f-9581-7636ac692ec9",
+    "name": "Capital Gains",
+    "type": "income",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 5,
+    "createdAt": "2026-02-04T14:58:19.034Z",
+    "updatedAt": "2026-02-04T14:58:19.034Z"
+  },
+  {
+    "id": "74001dc9-adcb-4a6a-969c-738779a9f3bc",
+    "name": "Rental Income",
+    "type": "income",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 6,
+    "createdAt": "2026-02-04T14:58:19.034Z",
+    "updatedAt": "2026-02-04T14:58:19.034Z"
+  },
+  {
+    "id": "37ee3cd1-e032-4dfe-a301-5e56ea83f3b9",
+    "name": "Other Income",
+    "type": "income",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 7,
+    "createdAt": "2026-02-04T14:58:19.034Z",
+    "updatedAt": "2026-02-04T14:58:19.034Z"
+  },
+  {
+    "id": "98a9823f-5ded-413c-87dd-986bf1b8c129",
+    "name": "Rent",
+    "type": "expense",
+    "parentCategory": "Housing",
+    "isActive": true,
+    "displayOrder": 1,
+    "createdAt": "2026-02-04T14:58:19.034Z",
+    "updatedAt": "2026-02-04T14:58:19.034Z"
+  },
+  {
+    "id": "ce1ecc27-51c6-46d4-87e1-8832d7800d75",
+    "name": "Utilities",
+    "type": "expense",
+    "parentCategory": "Housing",
+    "isActive": true,
+    "displayOrder": 2,
+    "createdAt": "2026-02-04T14:58:19.034Z",
+    "updatedAt": "2026-02-04T14:58:19.034Z"
+  },
+  {
+    "id": "a5d7a7fe-45f6-490e-b754-5b3f1e370f81",
+    "name": "Maintenance",
+    "type": "expense",
+    "parentCategory": "Housing",
+    "isActive": true,
+    "displayOrder": 3,
+    "createdAt": "2026-02-04T14:58:19.034Z",
+    "updatedAt": "2026-02-04T14:58:19.034Z"
+  },
+  {
+    "id": "44dfb398-be26-4e45-8c8a-438d54ba6946",
+    "name": "Groceries",
+    "type": "expense",
+    "parentCategory": "Food",
+    "isActive": true,
+    "displayOrder": 4,
+    "createdAt": "2026-02-04T14:58:19.034Z",
+    "updatedAt": "2026-02-04T14:58:19.034Z"
+  },
+  {
+    "id": "a184fa20-e9ea-4edc-9f71-c22a302e305c",
+    "name": "Dining Out",
+    "type": "expense",
+    "parentCategory": "Food",
+    "isActive": true,
+    "displayOrder": 5,
+    "createdAt": "2026-02-04T14:58:19.034Z",
+    "updatedAt": "2026-02-04T14:58:19.034Z"
+  },
+  {
+    "id": "d352ecac-b36f-4f02-8c52-43196b400c68",
+    "name": "Transport",
+    "type": "expense",
+    "parentCategory": "Transportation",
+    "isActive": true,
+    "displayOrder": 6,
+    "createdAt": "2026-02-04T14:58:19.034Z",
+    "updatedAt": "2026-02-04T14:58:19.034Z"
+  },
+  {
+    "id": "843bcde8-0efa-459b-8f5e-80a296e022e4",
+    "name": "Fuel",
+    "type": "expense",
+    "parentCategory": "Transportation",
+    "isActive": true,
+    "displayOrder": 7,
+    "createdAt": "2026-02-04T14:58:19.034Z",
+    "updatedAt": "2026-02-04T14:58:19.034Z"
+  },
+  {
+    "id": "c9503857-aabc-45be-8e06-ab93a696c9f4",
+    "name": "Vehicle Maintenance",
+    "type": "expense",
+    "parentCategory": "Transportation",
+    "isActive": true,
+    "displayOrder": 8,
+    "createdAt": "2026-02-04T14:58:19.034Z",
+    "updatedAt": "2026-02-04T14:58:19.034Z"
+  },
+  {
+    "id": "244f4ebb-1384-4266-b378-b6b31cee30cf",
+    "name": "Entertainment",
+    "type": "expense",
+    "parentCategory": "Lifestyle",
+    "isActive": true,
+    "displayOrder": 9,
+    "createdAt": "2026-02-04T14:58:19.034Z",
+    "updatedAt": "2026-02-04T14:58:19.034Z"
+  },
+  {
+    "id": "137bee91-a880-4b84-baf8-7cc4d906a15a",
+    "name": "Shopping",
+    "type": "expense",
+    "parentCategory": "Lifestyle",
+    "isActive": true,
+    "displayOrder": 10,
+    "createdAt": "2026-02-04T14:58:19.034Z",
+    "updatedAt": "2026-02-04T14:58:19.034Z"
+  },
+  {
+    "id": "39be152a-a432-4102-99db-3aa510242229",
+    "name": "Healthcare",
+    "type": "expense",
+    "parentCategory": "Healthcare",
+    "isActive": true,
+    "displayOrder": 11,
+    "createdAt": "2026-02-04T14:58:19.034Z",
+    "updatedAt": "2026-02-04T14:58:19.034Z"
+  },
+  {
+    "id": "92aa8ee6-4573-41b3-94d8-be09e3d571e0",
+    "name": "Insurance",
+    "type": "expense",
+    "parentCategory": "Insurance",
+    "isActive": true,
+    "displayOrder": 12,
+    "createdAt": "2026-02-04T14:58:19.034Z",
+    "updatedAt": "2026-02-04T14:58:19.034Z"
+  },
+  {
+    "id": "a4ec0d0d-dc57-4a05-adc6-7abf13821bd6",
+    "name": "Education",
+    "type": "expense",
+    "parentCategory": "Education",
+    "isActive": true,
+    "displayOrder": 13,
+    "createdAt": "2026-02-04T14:58:19.034Z",
+    "updatedAt": "2026-02-04T14:58:19.034Z"
+  },
+  {
+    "id": "30b73f04-ecc3-47cf-853a-dd892cadf8e7",
+    "name": "Donation",
+    "type": "expense",
+    "parentCategory": "Charity",
+    "isActive": true,
+    "displayOrder": 14,
+    "createdAt": "2026-02-04T14:58:19.034Z",
+    "updatedAt": "2026-02-04T14:58:19.034Z"
+  },
+  {
+    "id": "c3e13861-074d-4b1c-a36e-2c211dc6c10d",
+    "name": "Investment",
+    "type": "expense",
+    "parentCategory": "Savings",
+    "isActive": true,
+    "displayOrder": 15,
+    "createdAt": "2026-02-04T14:58:19.034Z",
+    "updatedAt": "2026-02-04T14:58:19.034Z"
+  },
+  {
+    "id": "9a91734f-b090-4c88-a110-4f77f1813373",
+    "name": "Loan Payment",
+    "type": "expense",
+    "parentCategory": "Debt",
+    "isActive": true,
+    "displayOrder": 16,
+    "createdAt": "2026-02-04T14:58:19.034Z",
+    "updatedAt": "2026-02-04T14:58:19.034Z"
+  },
+  {
+    "id": "211c9fbb-bb6e-47d3-8fdf-7c6654010a7b",
+    "name": "Taxes",
+    "type": "expense",
+    "parentCategory": "Taxes",
+    "isActive": true,
+    "displayOrder": 17,
+    "createdAt": "2026-02-04T14:58:19.034Z",
+    "updatedAt": "2026-02-04T14:58:19.034Z"
+  },
+  {
+    "id": "fe926831-062c-4c09-9c29-0f4f88fbef5b",
+    "name": "Other Expenses",
+    "type": "expense",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 18,
+    "createdAt": "2026-02-04T14:58:19.034Z",
+    "updatedAt": "2026-02-04T14:58:19.034Z"
+  },
+  {
+    "id": "2879b797-1c23-46eb-b942-19cb3badb8ec",
+    "name": "Shloka",
+    "type": "expense",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-04T15:36:02.337Z",
+    "updatedAt": "2026-02-04T15:36:02.337Z"
+  },
+  {
+    "id": "00858f26-eb1f-4f11-962e-173177a74d18",
+    "name": "Bob Debt",
+    "type": "income",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-04T15:36:02.342Z",
+    "updatedAt": "2026-02-04T15:36:02.342Z"
+  },
+  {
+    "id": "b6e221b5-61d9-4423-9263-6f623a21bee0",
+    "name": "LR-Shloka SSA",
+    "type": "expense",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-04T15:36:02.348Z",
+    "updatedAt": "2026-02-04T15:36:02.348Z"
+  },
+  {
+    "id": "1889d79f-75ec-4186-b009-82ab5436d266",
+    "name": "Stock Refund",
+    "type": "income",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-04T15:36:02.351Z",
+    "updatedAt": "2026-02-04T15:36:02.351Z"
+  },
+  {
+    "id": "23c66f42-0c57-45ab-b258-bb3839a42d32",
+    "name": "Petrol",
+    "type": "expense",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-04T15:36:02.356Z",
+    "updatedAt": "2026-02-04T15:36:02.356Z"
+  },
+  {
+    "id": "e902032b-6b91-4858-bdc6-c1da115906e9",
+    "name": "LR-FD",
+    "type": "expense",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-04T15:36:02.360Z",
+    "updatedAt": "2026-02-04T15:36:02.360Z"
+  },
+  {
+    "id": "c0a490ce-ed9e-4825-be26-b48436b45196",
+    "name": "Kunica",
+    "type": "expense",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-04T15:36:02.364Z",
+    "updatedAt": "2026-02-04T15:36:02.364Z"
+  },
+  {
+    "id": "2f83beb1-3f54-42ca-a4f7-b3f988ca20de",
+    "name": "Home Expenses",
+    "type": "expense",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-04T15:36:02.368Z",
+    "updatedAt": "2026-02-04T15:36:02.368Z"
+  },
+  {
+    "id": "da271250-bd12-45c5-a942-c5d57a3aaaf2",
+    "name": "CC Debt Repayment",
+    "type": "expense",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-04T15:36:02.374Z",
+    "updatedAt": "2026-02-04T15:36:02.374Z"
+  },
+  {
+    "id": "b9d079bb-0f30-4986-9269-6da588d01c05",
+    "name": "Health/Medical",
+    "type": "expense",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-04T15:36:02.377Z",
+    "updatedAt": "2026-02-04T15:36:02.377Z"
+  },
+  {
+    "id": "33633521-9ae6-430c-b9a8-142ef5bcdb8e",
+    "name": "LIC",
+    "type": "expense",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-04T15:36:02.383Z",
+    "updatedAt": "2026-02-04T15:36:02.383Z"
+  },
+  {
+    "id": "cbd2142c-23eb-4b8e-9144-27295762b373",
+    "name": "Latha",
+    "type": "expense",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-04T15:36:02.387Z",
+    "updatedAt": "2026-02-04T15:36:02.387Z"
+  },
+  {
+    "id": "16a72f79-3ef8-4b7b-93d3-9757566b16ac",
+    "name": "Water",
+    "type": "expense",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-04T15:36:02.398Z",
+    "updatedAt": "2026-02-04T15:36:02.398Z"
+  },
+  {
+    "id": "322945de-09d7-4fc6-bf3d-dfe1db146c55",
+    "name": "Suraj",
+    "type": "expense",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-04T15:36:02.401Z",
+    "updatedAt": "2026-02-04T15:36:02.401Z"
+  },
+  {
+    "id": "05e91842-d01c-47d3-b04a-6b37556f1502",
+    "name": "Food",
+    "type": "expense",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-04T15:36:02.411Z",
+    "updatedAt": "2026-02-04T15:36:02.411Z"
+  },
+  {
+    "id": "bc76408f-0e14-42a6-ba31-82bd7d2ff8d1",
+    "name": "Telephone & Internet",
+    "type": "expense",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-04T15:36:02.423Z",
+    "updatedAt": "2026-02-04T15:36:02.423Z"
+  },
+  {
+    "id": "50d3859d-a585-41df-b2b2-ba7109fc4948",
+    "name": "Debt Repayment",
+    "type": "expense",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-04T15:36:02.430Z",
+    "updatedAt": "2026-02-04T15:36:02.430Z"
+  },
+  {
+    "id": "539f2cea-965f-4ebb-9eed-f9d3013eee61",
+    "name": "Home Improvement",
+    "type": "expense",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-04T15:36:02.464Z",
+    "updatedAt": "2026-02-04T15:36:02.464Z"
+  },
+  {
+    "id": "1e0779db-56bd-4473-82c0-ef05f0e4fdb5",
+    "name": "Electricity",
+    "type": "expense",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-04T15:36:02.481Z",
+    "updatedAt": "2026-02-04T15:36:02.481Z"
+  },
+  {
+    "id": "c2a4a24c-64ba-4f9c-8874-0f7afa6d65ec",
+    "name": "Transportation",
+    "type": "expense",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-04T15:36:02.514Z",
+    "updatedAt": "2026-02-04T15:36:02.514Z"
+  },
+  {
+    "id": "50d27356-a057-4246-ad19-b8b8f46d3aa4",
+    "name": "Transfers (Self)",
+    "type": "expense",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-05T02:45:01.619Z",
+    "updatedAt": "2026-02-05T02:45:01.619Z"
+  },
+  {
+    "id": "0a8d820c-5402-4bf7-8c6f-fef9adc07ec3",
+    "name": "Transfers (Others)",
+    "type": "expense",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-05T02:45:01.758Z",
+    "updatedAt": "2026-02-05T02:45:01.758Z"
+  },
+  {
+    "id": "a0379460-7eae-4d24-82e3-5b2f41dd0013",
+    "name": "Bank Interest",
+    "type": "income",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-05T03:45:07.136Z",
+    "updatedAt": "2026-02-05T03:45:07.136Z"
+  },
+  {
+    "id": "fd103f69-7cd7-47d3-a94f-67edd75ab8f8",
+    "name": "HR-Stocks-Sharekhan",
+    "type": "expense",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-05T03:47:51.101Z",
+    "updatedAt": "2026-02-05T03:47:51.101Z"
+  },
+  {
+    "id": "c10790c8-d5e9-40aa-9e8c-418a3ed78502",
+    "name": "Refund",
+    "type": "income",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-05T03:47:51.126Z",
+    "updatedAt": "2026-02-05T03:47:51.126Z"
+  },
+  {
+    "id": "a4f212cb-faae-4efa-8ff8-842bbbbc6b29",
+    "name": "HR-Shloka Stocks",
+    "type": "expense",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-05T03:47:51.158Z",
+    "updatedAt": "2026-02-05T03:47:51.158Z"
+  },
+  {
+    "id": "16cb56ed-02e9-4b13-b927-e775fb3cc0f9",
+    "name": "Bob Debt Repayment",
+    "type": "expense",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-05T03:47:51.332Z",
+    "updatedAt": "2026-02-05T03:47:51.332Z"
+  },
+  {
+    "id": "da1fddf5-3ff7-4295-9801-85d7566d6c46",
+    "name": "Investment Refund",
+    "type": "income",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-05T03:47:51.341Z",
+    "updatedAt": "2026-02-05T03:47:51.341Z"
+  },
+  {
+    "id": "ed4662c1-a92f-44a4-8c46-e92af0f90af4",
+    "name": "Bob Interest",
+    "type": "expense",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-05T03:47:51.345Z",
+    "updatedAt": "2026-02-05T03:47:51.345Z"
+  },
+  {
+    "id": "40598937-b89f-4282-9409-44ead2438ea1",
+    "name": "Travel (Expenses)",
+    "type": "expense",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-05T03:47:51.357Z",
+    "updatedAt": "2026-02-05T03:47:51.357Z"
+  },
+  {
+    "id": "f2bdfaaa-6bf7-4b76-b455-a187e3b6603c",
+    "name": "Vehicle Insurance",
+    "type": "expense",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-05T03:47:51.376Z",
+    "updatedAt": "2026-02-05T03:47:51.376Z"
+  },
+  {
+    "id": "994dfc5c-e4f9-4880-9515-d4f78221796b",
+    "name": "Gifting",
+    "type": "expense",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-05T03:47:51.396Z",
+    "updatedAt": "2026-02-05T03:47:51.396Z"
+  },
+  {
+    "id": "d75cf9f5-a3f3-451e-9e31-f860168fb23c",
+    "name": "food",
+    "type": "expense",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-05T03:47:51.510Z",
+    "updatedAt": "2026-02-05T03:47:51.510Z"
+  },
+  {
+    "id": "ff988bf3-10d8-443d-983a-9184d3dd3e0f",
+    "name": "HR-Stocks-Zerodha",
+    "type": "expense",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-05T03:47:51.848Z",
+    "updatedAt": "2026-02-05T03:47:51.848Z"
+  },
+  {
+    "id": "ded6d346-e655-4a2c-950e-e05352c12a6c",
+    "name": "Transfers (Family)",
+    "type": "income",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-05T03:47:53.198Z",
+    "updatedAt": "2026-02-05T03:47:53.198Z"
+  },
+  {
+    "id": "5edc9957-b65b-4a37-ae4a-3c77b3aced16",
+    "name": "LR-Suraj PPF",
+    "type": "expense",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-05T03:47:53.821Z",
+    "updatedAt": "2026-02-05T03:47:53.821Z"
+  },
+  {
+    "id": "0a5e5416-8ade-4ffa-8a33-e2feb6c69488",
+    "name": "HR-Latha Stocks",
+    "type": "expense",
+    "parentCategory": null,
+    "isActive": true,
+    "displayOrder": 0,
+    "createdAt": "2026-02-05T03:47:54.107Z",
+    "updatedAt": "2026-02-05T03:47:54.107Z"
+  }
+]

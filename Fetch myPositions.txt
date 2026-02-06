@@ -1,0 +1,173 @@
+function generateTrade(stockQuant, stockPrice, action) {
+  /**
+   * Creates a trade object with the specified quantity, price, and action.
+   *
+   * @param {number} stockQuant - The quantity of the stock.
+   * @param {number} stockPrice - The price of the stock.
+   * @param {string} action - The action to be performed (e.g., "Buy", "Sell", "SPLIT").
+   * @returns {Object} - An object representing the trade, with properties for `shares`, `price`, and `action`.
+   */
+  return {
+    shares: stockQuant,
+    price: stockPrice,
+    action: action
+  };
+}
+
+function generateFifo(security, actions, quantity, price) {
+  /**
+   * Generates a portfolio using the FIFO (First-In-First-Out) method based on the provided security, actions, quantity, and price data.
+   *
+   * @param {Array} security - An array of security tickers.
+   * @param {Array} actions - An array of actions to be performed (e.g., "Buy", "Sell", "SPLIT").
+   * @param {Array} quantity - An array of quantities corresponding to each action.
+   * @param {Array} price - An array of prices corresponding to each action.
+   * @returns {Map} - A Map containing the portfolio, where keys are security tickers and values are arrays of trade objects.
+   */
+  let portfolio = new Map();
+  for (var i = 0; i < security?.length; i++) {
+
+    let ticker = security[i].toString();
+    let action = actions[i].toString();
+    let stockQuant = Number(quantity[i]);
+    let stockPrice = Number(price[i]);
+    let trade = generateTrade(stockQuant, stockPrice, action);
+
+    if (action == "Buy"  || action == "Stock Tfr - In"|| action == "Resulting") {
+      let activeTrades = portfolio.get(ticker);
+      if (activeTrades == null) {
+        portfolio.set(ticker, [trade]);
+      } else {
+        activeTrades.push(trade);
+      }
+    }
+
+    if (action.toUpperCase() == "SPLIT") {
+      let activeTrades = portfolio.get(ticker);
+      let ratio = quantity[i].toString().split(":");
+      activeTrades = activeTrades.map((trade) => {
+        trade.shares = trade.shares * ratio[0];
+        trade.price = trade.price / ratio[0];
+        trade.shares = trade.shares * ratio[1];
+        trade.price = trade.price / ratio[1];
+        return trade;
+      });
+    }
+
+        if (action.toUpperCase() == "DEMERGER") {
+      let activeTrades = portfolio.get(ticker);
+      let ratio = quantity[i].toString().split(":");
+      activeTrades = activeTrades.map((trade) => {
+      trade.price = trade.price*ratio[0];
+        return trade;
+      });
+    }
+
+      if (action == "Bonus") {
+      let activeTrades = portfolio.get(ticker);
+      let ratioParts = quantity[i].toString().split(":");
+      let ratio = parseInt(ratioParts[1]) / parseInt(ratioParts[0]);
+      activeTrades = activeTrades.map((trade) => {
+       trade.shares = trade.shares + (trade.shares*ratio);
+       trade.price = trade.price / (1+ ratio);
+       return trade;
+      });
+    }
+
+if (action == "Sell" || action == "Stock Tfr - Out") {
+   let activeTrades = portfolio.get(ticker);
+   let precision = 5;
+   if (activeTrades != null) {
+      let sharesToSell = Number(Number(trade.shares).toFixed(precision));
+      while (sharesToSell > 0) {
+         sharesToSell = Number(Number(sharesToSell).toFixed(precision));
+         if (activeTrades.length > 0) {
+            let itemToSell = activeTrades[0];
+            itemToSell.shares = Number(Number(itemToSell.shares).toFixed(precision));
+            if (itemToSell.shares == sharesToSell) {
+               sharesToSell = 0;
+               activeTrades.splice(0, 1);
+
+            } else if (itemToSell.shares < sharesToSell) {
+               sharesToSell -= itemToSell.shares;
+               activeTrades.splice(0, 1);
+
+            } else {
+               itemToSell.shares -= sharesToSell;
+               sharesToSell = 0;
+
+            }
+         }
+      }
+
+      if (activeTrades.length == 0) {
+         portfolio.delete(ticker);
+      }
+   }
+}
+
+    /*if ((action == "Sell")) {
+      let activeTrades = portfolio.get(ticker);
+     // let precision = 5;
+      if (activeTrades != null) {
+       // let sharesToSell = Number(Number(trade.shares).toFixed(precision));
+        let sharesToSell = Number(trade.shares);
+     //   for (let j = 0; j < activeTrades.length && sharesToSell > 0; j++) {
+        for (let j = 0; j < activeTrades && sharesToSell > 0; j++) {
+          let itemToSell = activeTrades[j];
+          //itemToSell.shares = Number(Number(itemToSell.shares).toFixed(precision));
+          itemToSell.shares = Number(itemToSell.shares);
+          if (itemToSell.shares === sharesToSell) {
+            sharesToSell = 0;
+            activeTrades.splice(j, 1);
+          } else if (itemToSell.shares < sharesToSell) {
+            sharesToSell -= itemToSell.shares;
+            activeTrades.splice(j, 1);
+          } else {
+            itemToSell.shares -= sharesToSell;
+            sharesToSell = 0;
+          }
+        }
+
+        if (activeTrades.length === 0) {
+          portfolio.delete(ticker);
+        }
+      }
+    }
+ */
+ 
+  }
+  return portfolio;
+}
+
+function myPositions(security, actions, quantity, price) {
+  /**
+   * Calculates the current positions in a portfolio based on the provided security, actions, quantity, and price data.
+   *
+   * @param {Array} security - An array of security tickers.
+   * @param {Array} actions - An array of actions to be performed (e.g., "Buy", "Sell", "SPLIT").
+   * @param {Array} quantity - An array of quantities corresponding to each action.
+   * @param {Array} price - An array of prices corresponding to each action.
+   * @returns {Array} - An array of arrays, where each inner array represents a position with the ticker, shares, and average price.
+   */
+  let portfolio = generateFifo(security, actions, quantity, price);
+
+  let returnArry = [];
+  portfolio.forEach((value, key) => {
+    let shares = 0;
+    let totalCost = 0;
+    let avgPrice = 0;
+    value.map(trade => {
+      shares += trade.shares;
+      totalCost += trade.shares * trade.price;
+    });
+
+    avgPrice = totalCost / shares;
+    returnArry.push([key, shares, avgPrice]);
+  });
+
+    // Sort the returnArry by ticker name (key) in ascending order
+  returnArry.sort((a, b) => a[0].localeCompare(b[0]));
+  
+  return returnArry;
+}

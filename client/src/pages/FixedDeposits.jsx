@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2, CheckCircle } from 'lucide-react';
-import axios from 'axios';
+import { Plus, Trash2, Edit2, Calendar, DollarSign, Tag, Info } from 'lucide-react';
 import { formatIndianRupee, formatIndianRupeeInt } from '../utils/formatCurrency';
-
-const api = axios.create({
-    baseURL: 'http://localhost:5000/api'
-});
+import api from '../services/api';
 
 const FixedDeposits = () => {
     const [fds, setFds] = useState([]);
     const [accounts, setAccounts] = useState([]);
+    const [coa, setCoa] = useState([]); // Chart of Accounts for accounting entries
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isRedeemModalOpen, setIsRedeemModalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [editingFd, setEditingFd] = useState(null);
     const [redeemingFd, setRedeemingFd] = useState(null);
+    const [createJournalEntry, setCreateJournalEntry] = useState(false);
+    const [selectedBankAccountId, setSelectedBankAccountId] = useState('');
 
     const [formData, setFormData] = useState({
         bankName: '',
@@ -38,6 +37,7 @@ const FixedDeposits = () => {
     useEffect(() => {
         fetchFds();
         fetchAccounts();
+        fetchCoa();
     }, []);
 
     // Auto-calculate maturity amount
@@ -119,6 +119,19 @@ const FixedDeposits = () => {
         }
     };
 
+    const fetchCoa = async () => {
+        try {
+            const res = await api.get('/accounting/coa');
+            setCoa(res.data);
+        } catch (err) {
+            console.error('Error fetching CoA:', err);
+        }
+    };
+
+    // Helper functions to filter accounts
+    const getFdAccounts = () => coa.filter(a => a.name?.includes('Fixed Deposit') || a.name?.includes('Recurring Deposit'));
+    const getBankLedgerAccounts = () => coa.filter(a => a.subType === 'bank' || a.linkedType === 'Account');
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -128,10 +141,32 @@ const FixedDeposits = () => {
                 alert('Fixed Deposit updated successfully!');
             } else {
                 await api.post('/fds', formData);
+
+                // Create accounting journal entry if checkbox is selected
+                if (createJournalEntry && selectedBankAccountId) {
+                    const fdAccount = getFdAccounts()[0]; // Get the first FD account
+                    if (fdAccount) {
+                        try {
+                            await api.post('/accounting/fd/create', {
+                                transactionDate: formData.startDate,
+                                fdAccountId: fdAccount.id,
+                                bankAccountId: selectedBankAccountId,
+                                amount: formData.principalAmount,
+                                description: `FD Created - ${formData.bankName} ${formData.accountNumber || ''}`
+                            });
+                        } catch (journalErr) {
+                            console.error('Failed to create journal entry:', journalErr);
+                            alert('FD saved, but journal entry failed: ' + (journalErr.response?.data?.error || journalErr.message));
+                        }
+                    }
+                }
+
                 alert('Fixed Deposit added successfully!');
             }
             setIsModalOpen(false);
             setEditingFd(null);
+            setCreateJournalEntry(false);
+            setSelectedBankAccountId('');
             resetForm();
             fetchFds();
         } catch (err) {
@@ -353,6 +388,40 @@ const FixedDeposits = () => {
                                 <label>Remarks</label>
                                 <input type="text" value={formData.remarks} onChange={e => setFormData({ ...formData, remarks: e.target.value })} />
                             </div>
+
+                            {/* Accounting Journal Entry Option - only for new FDs */}
+                            {!editingFd && (
+                                <div className="form-group" style={{ gridColumn: 'span 2', padding: '1rem', background: 'rgba(74, 144, 226, 0.1)', borderRadius: '0.5rem', border: '1px solid rgba(74, 144, 226, 0.3)' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: createJournalEntry ? '1rem' : '0' }}>
+                                        <input
+                                            type="checkbox"
+                                            checked={createJournalEntry}
+                                            onChange={e => setCreateJournalEntry(e.target.checked)}
+                                            style={{ width: 'auto' }}
+                                            id="createJournalEntry"
+                                        />
+                                        <label htmlFor="createJournalEntry" style={{ marginBottom: 0, cursor: 'pointer', fontWeight: '600' }}>
+                                            Create Accounting Journal Entry
+                                        </label>
+                                    </div>
+                                    {createJournalEntry && (
+                                        <div style={{ marginTop: '0.5rem' }}>
+                                            <label style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Bank Account (Source of Funds)</label>
+                                            <select
+                                                value={selectedBankAccountId}
+                                                onChange={e => setSelectedBankAccountId(e.target.value)}
+                                                required={createJournalEntry}
+                                            >
+                                                <option value="">Select Bank Account</option>
+                                                {getBankLedgerAccounts().map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
+                                            </select>
+                                            <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
+                                                This will create a journal entry: Debit FD Account, Credit Bank Account
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
                             <div className="form-actions" style={{ gridColumn: 'span 2', display: 'flex', gap: '1rem', marginTop: '0' }}>
                                 <button type="button" className="btn-secondary" style={{ flex: 1 }} onClick={() => setIsModalOpen(false)}>Cancel</button>
                                 <button type="submit" className="btn" style={{ flex: 1 }} disabled={loading}>

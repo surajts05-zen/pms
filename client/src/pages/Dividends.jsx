@@ -29,35 +29,61 @@ ChartJS.register(
     Legend
 );
 
-const api = axios.create({
-    baseURL: 'http://localhost:5000/api'
-});
-
-function Dividends() {
+const Dividends = () => {
     const [summary, setSummary] = useState(null);
     const [byYear, setByYear] = useState([]);
     const [byScrip, setByScrip] = useState([]);
     const [byQuarter, setByQuarter] = useState([]);
     const [trends, setTrends] = useState([]);
-    const [selectedYear, setSelectedYear] = useState('all');
+
+    // Period selection state
+    const [period, setPeriod] = useState('monthly'); // monthly, fy, custom
+    const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
+    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+    const [customRange, setCustomRange] = useState({
+        startDate: new Date().toISOString().split('T')[0],
+        endDate: new Date().toISOString().split('T')[0]
+    });
+
     const [selectedView, setSelectedView] = useState('overview');
     const [loading, setLoading] = useState(true);
 
+    const months = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+
     useEffect(() => {
         fetchDividendData();
-    }, [selectedYear]);
+    }, [period, selectedMonth, selectedYear, customRange]);
 
     const fetchDividendData = async () => {
         setLoading(true);
         try {
-            const params = selectedYear !== 'all' ? { year: selectedYear } : {};
+            let startDate, endDate;
+
+            // Calculate dates based on period
+            if (period === 'monthly') {
+                startDate = `${selectedYear}-${String(selectedMonth).padStart(2, '0')}-01`;
+                const lastDay = new Date(selectedYear, selectedMonth, 0).getDate();
+                endDate = `${selectedYear}-${String(selectedMonth).padStart(2, '0')}-${lastDay}`;
+            } else if (period === 'fy') {
+                // Financial Year (April to March)
+                startDate = `${selectedYear}-04-01`;
+                endDate = `${selectedYear + 1}-03-31`;
+            } else {
+                startDate = customRange.startDate;
+                endDate = customRange.endDate;
+            }
+
+            const params = { startDate, endDate };
 
             const [summaryRes, byYearRes, byScripRes, byQuarterRes, trendsRes] = await Promise.all([
                 api.get('/dividends/summary', { params }),
-                api.get('/dividends/by-year'),
+                api.get('/dividends/by-year', { params }),
                 api.get('/dividends/by-scrip', { params }),
                 api.get('/dividends/by-quarter', { params }),
-                api.get('/dividends/trends')
+                api.get('/dividends/trends', { params })
             ]);
 
             setSummary(summaryRes.data);
@@ -77,7 +103,7 @@ function Dividends() {
         if (byYear.length < 2) return 0;
         const currentYearData = byYear[byYear.length - 1];
         const previousYearData = byYear[byYear.length - 2];
-        const growth = ((currentYearData.totalAmount - previousYearData.totalAmount) / previousYearData.totalAmount) * 100;
+        const growth = ((parseFloat(currentYearData.totalAmount) - parseFloat(previousYearData.totalAmount)) / parseFloat(previousYearData.totalAmount)) * 100;
         return growth.toFixed(2);
     };
 
@@ -220,9 +246,6 @@ function Dividends() {
         }
     };
 
-    // Available years for filter
-    const years = ['all', ...new Set(byYear.map(y => y.year))];
-
     if (loading) {
         return (
             <section className="journal-section">
@@ -239,28 +262,117 @@ function Dividends() {
                 <div>
                     <h2>Dividend Income Dashboard</h2>
                     <p style={{ color: 'var(--text-muted)' }}>
-                        Track dividend income by year, scrip, and quarter
+                        Track dividend income by period, scrip, and quarter
                     </p>
                 </div>
             </div>
 
-            {/* Year Filter */}
-            <div className="card" style={{ marginBottom: '1.5rem', padding: '1rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-                    <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                        Filter by Year:
-                    </label>
-                    <div style={{ display: 'flex', gap: '0.5rem', background: 'rgba(255,255,255,0.05)', padding: '0.25rem', borderRadius: '0.5rem' }}>
-                        {years.map(year => (
-                            <button
-                                key={year}
-                                className={`nav-item ${selectedYear === year ? 'active' : ''}`}
-                                style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', border: 'none', background: 'none' }}
-                                onClick={() => setSelectedYear(year)}
+            {/* Period Filter */}
+            <div className="card" style={{ marginBottom: '1.5rem', padding: '1.25rem', background: 'linear-gradient(145deg, var(--card-bg), rgba(255,255,255,0.02))' }}>
+                <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-end', flexWrap: 'wrap' }}>
+                    <div className="form-group" style={{ marginBottom: 0, minWidth: '160px' }}>
+                        <label style={{ fontSize: '0.75rem', fontWeight: '600', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                            Period Type
+                        </label>
+                        <select
+                            value={period}
+                            onChange={e => setPeriod(e.target.value)}
+                        >
+                            <option value="monthly">Monthly View</option>
+                            <option value="fy">Financial Year</option>
+                            <option value="custom">Custom Range</option>
+                        </select>
+                    </div>
+
+                    {period === 'monthly' && (
+                        <>
+                            <div className="form-group" style={{ marginBottom: 0, minWidth: '140px' }}>
+                                <label style={{ fontSize: '0.75rem', fontWeight: '600', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                    Month
+                                </label>
+                                <select
+                                    value={selectedMonth}
+                                    onChange={e => setSelectedMonth(parseInt(e.target.value))}
+                                >
+                                    {months.map((month, idx) => (
+                                        <option key={idx} value={idx + 1}>{month}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="form-group" style={{ marginBottom: 0, minWidth: '100px' }}>
+                                <label style={{ fontSize: '0.75rem', fontWeight: '600', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                    Year
+                                </label>
+                                <select
+                                    value={selectedYear}
+                                    onChange={e => setSelectedYear(parseInt(e.target.value))}
+                                >
+                                    {[2024, 2025, 2026, 2027].map(year => (
+                                        <option key={year} value={year}>{year}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        </>
+                    )}
+
+                    {period === 'fy' && (
+                        <div className="form-group" style={{ marginBottom: 0, minWidth: '160px' }}>
+                            <label style={{ fontSize: '0.75rem', fontWeight: '600', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                Financial Year
+                            </label>
+                            <select
+                                value={selectedYear}
+                                onChange={e => setSelectedYear(parseInt(e.target.value))}
                             >
-                                {year === 'all' ? 'ALL' : year}
-                            </button>
-                        ))}
+                                {[2024, 2025, 2026, 2027].map(year => (
+                                    <option key={year} value={year}>FY {year}-{year + 1}</option>
+                                ))}
+                            </select>
+                        </div>
+                    )}
+
+                    {period === 'custom' && (
+                        <div style={{ display: 'flex', gap: '1rem' }}>
+                            <div className="form-group" style={{ marginBottom: 0 }}>
+                                <label style={{ fontSize: '0.75rem', fontWeight: '600', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                    Start Date
+                                </label>
+                                <input
+                                    type="date"
+                                    value={customRange.startDate}
+                                    onChange={e => setCustomRange({ ...customRange, startDate: e.target.value })}
+                                />
+                            </div>
+                            <div className="form-group" style={{ marginBottom: 0 }}>
+                                <label style={{ fontSize: '0.75rem', fontWeight: '600', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                    End Date
+                                </label>
+                                <input
+                                    type="date"
+                                    value={customRange.endDate}
+                                    onChange={e => setCustomRange({ ...customRange, endDate: e.target.value })}
+                                />
+                            </div>
+                        </div>
+                    )}
+
+                    <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', height: '100%' }}>
+                        <div style={{
+                            padding: '0.5rem 1rem',
+                            background: 'rgba(99, 102, 241, 0.1)',
+                            borderRadius: '0.5rem',
+                            border: '1px solid rgba(99, 102, 241, 0.2)',
+                            color: 'var(--primary)',
+                            fontSize: '0.85rem',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.5rem'
+                        }}>
+                            <Calendar size={16} />
+                            {period === 'monthly' && `${months[selectedMonth - 1]} ${selectedYear}`}
+                            {period === 'fy' && `FY ${selectedYear}-${selectedYear + 1}`}
+                            {period === 'custom' && `${customRange.startDate} to ${customRange.endDate}`}
+                        </div>
                     </div>
                 </div>
             </div>

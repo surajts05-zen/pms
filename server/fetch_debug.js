@@ -1,54 +1,29 @@
 
-async function run() {
+const { Transaction, Instrument, sequelize } = require('./models');
+const fs = require('fs');
+
+(async () => {
     try {
-        const transRes = await fetch('http://localhost:5000/api/transactions');
-        const transactions = await transRes.json();
-        const instrumentsRes = await fetch('http://localhost:5000/api/instruments');
-        const instruments = await instrumentsRes.json();
-        const accountsRes = await fetch('http://localhost:5000/api/accounts');
-        const accounts = await accountsRes.json();
+        await sequelize.authenticate();
+        let inst = await Instrument.findOne({ where: { name: 'BAJFINANCE' } });
+        if (!inst) {
+            inst = await Instrument.findOne({ where: { ticker: 'BAJFINANCE' } });
+        }
 
-        // Map IDs
-        const instMap = {};
-        instruments.forEach(i => instMap[i.id] = i.ticker);
-
-        const accMap = {};
-        accounts.forEach(a => accMap[a.id] = a.name);
-
-        const targetTickers = ['ASIANPAINT.NS', 'ASIANPAINT', 'COFORGE.NS', 'PARAS.NS'];
-
-        const logs = [];
-
-        transactions.forEach(t => {
-            const ticker = instMap[t.InstrumentId];
-            const accName = accMap[t.AccountId];
-            const qty = parseFloat(t.quantity);
-            const price = parseFloat(t.price);
-            const type = t.type;
-            const date = t.transactionDate;
-
-            if (targetTickers.some(tt => ticker && ticker.includes(tt.split('.')[0]))) { // Loose match
-                logs.push({
-                    account: accName,
-                    ticker: ticker,
-                    date: date,
-                    type: type,
-                    qty: qty,
-                    price: price,
-                    amount: qty * price
-                });
-            }
-        });
-
-        // Sort by dates
-        logs.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-        console.log('--- DETAILED LOGS ---');
-        console.table(logs);
-
+        if (inst) {
+            console.log('Found Instrument:', inst.name, inst.ticker);
+            const txns = await Transaction.findAll({
+                where: { InstrumentId: inst.id },
+                order: [['transactionDate', 'ASC']]
+            });
+            fs.writeFileSync('debug_baj_out.txt', JSON.stringify(txns, null, 2));
+            console.log('Written to debug_baj_out.txt');
+        } else {
+            console.log('Instrument NOT FOUND');
+        }
     } catch (e) {
         console.error(e);
+    } finally {
+        process.exit();
     }
-}
-
-run();
+})();

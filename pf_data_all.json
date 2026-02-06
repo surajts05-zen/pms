@@ -1,0 +1,1724 @@
+{
+  "BGBNG00233900000104179_2021.pdf": {
+    "data": [
+      [
+        [
+          "fooj.k / Particulars",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "deZpkjh 'ks\"k /\nEmployee\nBalance",
+          "fu;ks\u00e4k 'ks\"k /\nEmployer\nBalance",
+          "isa'ku 'ks\"k /\nPension\nBalance"
+        ],
+        [
+          "OB Int. Updated upto 31/03/2021",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "osru ekg /\nWage Month",
+          "V\u00aakalD'ku / Transaction",
+          null,
+          "fooj.k / Particulars",
+          "osru / Wages",
+          null,
+          "va'knku / Contribution",
+          null,
+          null
+        ],
+        [
+          null,
+          "fnuk\u00a1d / Date",
+          "\u00e7dkj\n/ Type",
+          null,
+          "bZ ih ,Q / EPF",
+          "bZ ih ,l / EPS",
+          "deZpkjh /\nEmployee",
+          "fu;ks\u00e4k /\nEmployer",
+          "isa'ku /\nPension"
+        ],
+        [
+          "Aug-2021",
+          "13-09-2021",
+          "CR",
+          "Cont. For Due-Month 092021",
+          "53,763",
+          "0",
+          "6,452",
+          "6,452",
+          "0"
+        ],
+        [
+          "Sep-2021",
+          "08-10-2021",
+          "CR",
+          "Cont. For Due-Month 102021",
+          "75,758",
+          "0",
+          "9,091",
+          "9,091",
+          "0"
+        ],
+        [
+          "Oct-2021",
+          "10-11-2021",
+          "CR",
+          "Cont. For Due-Month 112021",
+          "75,758",
+          "0",
+          "20,455",
+          "9,091",
+          "0"
+        ],
+        [
+          "Nov-2021",
+          "13-12-2021",
+          "CR",
+          "Cont. For Due-Month 122021",
+          "75,758",
+          "0",
+          "20,455",
+          "9,091",
+          "0"
+        ],
+        [
+          "Dec-2021",
+          "11-01-2022",
+          "CR",
+          "Cont. For Due-Month 012022",
+          "75,758",
+          "0",
+          "20,455",
+          "9,091",
+          "0"
+        ],
+        [
+          "Jan-2022",
+          "10-02-2022",
+          "CR",
+          "Cont. For Due-Month 022022",
+          "75,758",
+          "0",
+          "29,546",
+          "9,091",
+          "0"
+        ],
+        [
+          "Feb-2022",
+          "11-03-2022",
+          "CR",
+          "Cont. For Due-Month 032022",
+          "75,758",
+          "0",
+          "40,152",
+          "9,091",
+          "0"
+        ],
+        [
+          "Total Contributions for the year [ 2021 ]",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "1,46,606",
+          "60,998",
+          "0"
+        ],
+        [
+          "Total Transfer-Ins/VDRs for the year [ 2021 ]",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "Total Withdrawals for the year [ 2021 ]",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "Int. Updated upto 31/03/2022",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "2,010",
+          "1,182",
+          "0"
+        ],
+        [
+          "Closing Balance as on 31/03/2022",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "1,48,616",
+          "62,180",
+          "0"
+        ]
+      ],
+      [
+        [
+          "Taxable Data for the year [ 2021-2022]",
+          null,
+          null,
+          null
+        ],
+        [
+          "OB Int. Updated upto 01/04/2021",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "Cont. Month",
+          "Monthly Contribution",
+          "Cumulative Balance at the end of the Month",
+          null
+        ],
+        [
+          null,
+          null,
+          "Non-Taxable",
+          "Taxable"
+        ],
+        [
+          "Apr-2021",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "May-2021",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "Jun-2021",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "Jul-2021",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "Aug-2021",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "Sep-2021",
+          "6,452",
+          "6,452",
+          "0"
+        ],
+        [
+          "Oct-2021",
+          "9,091",
+          "15,543",
+          "0"
+        ],
+        [
+          "Nov-2021",
+          "20,455",
+          "35,998",
+          "0"
+        ],
+        [
+          "Dec-2021",
+          "20,455",
+          "56,453",
+          "0"
+        ],
+        [
+          "Jan-2022",
+          "20,455",
+          "76,908",
+          "0"
+        ],
+        [
+          "Feb-2022",
+          "29,546",
+          "1,06,454",
+          "0"
+        ],
+        [
+          "Mar-2022",
+          "40,152",
+          "1,46,606",
+          "0"
+        ],
+        [
+          "TOTAL",
+          "1,46,606",
+          "1,46,606",
+          "0"
+        ],
+        [
+          "Int. Updated upto 31/03/2022",
+          "2,010",
+          "2,010",
+          "0"
+        ],
+        [
+          "Closing Balance as on 31/03/2022",
+          "1,48,616",
+          "1,48,616",
+          "0"
+        ]
+      ]
+    ]
+  },
+  "BGBNG00233900000104179_2022.pdf": {
+    "data": [
+      [
+        [
+          "fooj.k / Particulars",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "deZpkjh 'ks\"k /\nEmployee\nBalance",
+          "fu;ks\u00e4k 'ks\"k /\nEmployer\nBalance",
+          "isa'ku 'ks\"k /\nPension\nBalance"
+        ],
+        [
+          "OB Int. Updated upto 01/04/2022",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "1,48,616",
+          "62,180",
+          "0"
+        ],
+        [
+          "osru ekg /\nWage Month",
+          "V\u00aakalD'ku / Transaction",
+          null,
+          "fooj.k / Particulars",
+          "osru / Wages",
+          null,
+          "va'knku / Contribution",
+          null,
+          null
+        ],
+        [
+          null,
+          "fnuk\u00a1d / Date",
+          "\u00e7dkj\n/ Type",
+          null,
+          "bZ ih ,Q / EPF",
+          "bZ ih ,l / EPS",
+          "deZpkjh /\nEmployee",
+          "fu;ks\u00e4k /\nEmployer",
+          "isa'ku /\nPension"
+        ],
+        [
+          "Mar-2022",
+          "13-04-2022",
+          "CR",
+          "Cont. For Due-Month 042022",
+          "75,758",
+          "0",
+          "40,152",
+          "9,091",
+          "0"
+        ],
+        [
+          "Apr-2022",
+          "12-05-2022",
+          "CR",
+          "Cont. For Due-Month 052022",
+          "75,758",
+          "0",
+          "40,152",
+          "9,091",
+          "0"
+        ],
+        [
+          "May-2022",
+          "13-06-2022",
+          "CR",
+          "Cont. For Due-Month 062022",
+          "75,758",
+          "0",
+          "40,152",
+          "9,091",
+          "0"
+        ],
+        [
+          "Jun-2022",
+          "12-07-2022",
+          "CR",
+          "Cont. For Due-Month 072022",
+          "75,758",
+          "0",
+          "40,152",
+          "9,091",
+          "0"
+        ],
+        [
+          "Jul-2022",
+          "10-08-2022",
+          "CR",
+          "Cont. For Due-Month 082022",
+          "81,818",
+          "0",
+          "43,363",
+          "9,818",
+          "0"
+        ],
+        [
+          "Aug-2022",
+          "12-09-2022",
+          "CR",
+          "Cont. For Due-Month 092022",
+          "81,818",
+          "0",
+          "43,363",
+          "9,818",
+          "0"
+        ],
+        [
+          "Sep-2022",
+          "11-10-2022",
+          "CR",
+          "Cont. For Due-Month 102022",
+          "81,818",
+          "0",
+          "43,363",
+          "9,818",
+          "0"
+        ],
+        [
+          "Oct-2022",
+          "13-11-2022",
+          "CR",
+          "Cont. For Due-Month 112022",
+          "81,818",
+          "0",
+          "43,363",
+          "9,818",
+          "0"
+        ],
+        [
+          "Nov-2022",
+          "12-12-2022",
+          "CR",
+          "Cont. For Due-Month 122022",
+          "81,818",
+          "0",
+          "43,363",
+          "9,818",
+          "0"
+        ],
+        [
+          "Dec-2022",
+          "13-01-2023",
+          "CR",
+          "Cont. For Due-Month 012023",
+          "81,818",
+          "0",
+          "43,363",
+          "9,818",
+          "0"
+        ],
+        [
+          "Jan-2023",
+          "13-02-2023",
+          "CR",
+          "Cont. For Due-Month 022023",
+          "81,818",
+          "0",
+          "43,363",
+          "9,818",
+          "0"
+        ],
+        [
+          "Feb-2023",
+          "10-03-2023",
+          "CR",
+          "Cont. For Due-Month 032023",
+          "81,818",
+          "0",
+          "43,363",
+          "9,818",
+          "0"
+        ],
+        [
+          "Total Contributions for the year [ 2022 ]",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "5,07,512",
+          "1,14,908",
+          "0"
+        ],
+        [
+          "Total Transfer-Ins/VDRs for the year [ 2022 ]",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "Total Withdrawals for the year [ 2022 ]",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "Int. Updated upto 31/03/2023",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "30,721",
+          "9,281",
+          "0"
+        ],
+        [
+          "Closing Balance as on 31/03/2023",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "6,86,849",
+          "1,86,369",
+          "0"
+        ]
+      ],
+      [
+        [
+          "Taxable Data for the year [ 2022-2023]",
+          null,
+          null,
+          null
+        ],
+        [
+          "OB Int. Updated upto 01/04/2022",
+          "1,48,616",
+          "1,48,616",
+          "0"
+        ],
+        [
+          "Cont. Month",
+          "Monthly Contribution",
+          "Cumulative Balance at the end of the Month",
+          null
+        ],
+        [
+          null,
+          null,
+          "Non-Taxable",
+          "Taxable"
+        ],
+        [
+          "Apr-2022",
+          "40,152",
+          "40,152",
+          "0"
+        ],
+        [
+          "May-2022",
+          "40,152",
+          "80,304",
+          "0"
+        ],
+        [
+          "Jun-2022",
+          "40,152",
+          "1,20,456",
+          "0"
+        ],
+        [
+          "Jul-2022",
+          "40,152",
+          "1,60,608",
+          "0"
+        ],
+        [
+          "Aug-2022",
+          "43,363",
+          "2,03,971",
+          "0"
+        ],
+        [
+          "Sep-2022",
+          "43,363",
+          "2,47,334",
+          "0"
+        ],
+        [
+          "Oct-2022",
+          "43,363",
+          "2,50,000",
+          "40,697"
+        ],
+        [
+          "Nov-2022",
+          "43,363",
+          "2,50,000",
+          "84,060"
+        ],
+        [
+          "Dec-2022",
+          "43,363",
+          "2,50,000",
+          "1,27,423"
+        ],
+        [
+          "Jan-2023",
+          "43,363",
+          "2,50,000",
+          "1,70,786"
+        ],
+        [
+          "Feb-2023",
+          "43,363",
+          "2,50,000",
+          "2,14,149"
+        ],
+        [
+          "Mar-2023",
+          "43,363",
+          "2,50,000",
+          "2,57,512"
+        ],
+        [
+          "TOTAL",
+          "5,07,512",
+          "2,50,000",
+          "2,57,512"
+        ],
+        [
+          "Int. Updated upto 31/03/2023",
+          "30,721",
+          "26,394",
+          "4,327"
+        ],
+        [
+          "Closing Balance as on 31/03/2023",
+          "6,86,849",
+          "4,25,010",
+          "2,61,839"
+        ]
+      ]
+    ]
+  },
+  "BGBNG00233900000104179_2023.pdf": {
+    "data": [
+      [
+        [
+          "fooj.k / Particulars",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "deZpkjh 'ks\"k /\nEmployee\nBalance",
+          "fu;ks\u00e4k 'ks\"k /\nEmployer\nBalance",
+          "isa'ku 'ks\"k /\nPension\nBalance"
+        ],
+        [
+          "OB Int. Updated upto 01/04/2023",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "6,86,849",
+          "1,86,369",
+          "0"
+        ],
+        [
+          "osru ekg /\nWage Month",
+          "V\u00aakalD'ku / Transaction",
+          null,
+          "fooj.k / Particulars",
+          "osru / Wages",
+          null,
+          "va'knku / Contribution",
+          null,
+          null
+        ],
+        [
+          null,
+          "fnuk\u00a1d / Date",
+          "\u00e7dkj\n/ Type",
+          null,
+          "bZ ih ,Q / EPF",
+          "bZ ih ,l / EPS",
+          "deZpkjh /\nEmployee",
+          "fu;ks\u00e4k /\nEmployer",
+          "isa'ku /\nPension"
+        ],
+        [
+          "Mar-2023",
+          "11-04-2023",
+          "CR",
+          "Cont. For Due-Month 042023",
+          "81,818",
+          "0",
+          "43,363",
+          "9,818",
+          "0"
+        ],
+        [
+          "Apr-2023",
+          "12-05-2023",
+          "CR",
+          "Cont. For Due-Month 052023",
+          "81,818",
+          "0",
+          "43,363",
+          "9,818",
+          "0"
+        ],
+        [
+          "May-2023",
+          "14-06-2023",
+          "CR",
+          "Cont. For Due-Month 062023",
+          "81,818",
+          "0",
+          "9,818",
+          "9,818",
+          "0"
+        ],
+        [
+          "Jun-2023",
+          "10-07-2023",
+          "CR",
+          "Cont. For Due-Month 072023",
+          "81,817",
+          "0",
+          "9,818",
+          "9,818",
+          "0"
+        ],
+        [
+          "Jul-2023",
+          "14-08-2023",
+          "CR",
+          "Cont. For Due-Month 082023",
+          "89,182",
+          "0",
+          "10,702",
+          "10,702",
+          "0"
+        ],
+        [
+          "Aug-2023",
+          "14-09-2023",
+          "CR",
+          "Cont. For Due-Month 092023",
+          "89,182",
+          "0",
+          "10,702",
+          "10,702",
+          "0"
+        ],
+        [
+          "Sep-2023",
+          "11-10-2023",
+          "CR",
+          "Cont. For Due-Month 102023",
+          "89,183",
+          "0",
+          "10,702",
+          "10,702",
+          "0"
+        ],
+        [
+          "Oct-2023",
+          "10-11-2023",
+          "CR",
+          "Cont. For Due-Month 112023",
+          "89,182",
+          "0",
+          "10,702",
+          "10,702",
+          "0"
+        ],
+        [
+          "Nov-2023",
+          "12-12-2023",
+          "CR",
+          "Cont. For Due-Month 122023",
+          "89,183",
+          "0",
+          "10,702",
+          "10,702",
+          "0"
+        ],
+        [
+          "Dec-2023",
+          "11-01-2024",
+          "CR",
+          "Cont. For Due-Month 012024",
+          "89,183",
+          "0",
+          "10,702",
+          "10,702",
+          "0"
+        ],
+        [
+          "Jan-2024",
+          "12-02-2024",
+          "CR",
+          "Cont. For Due-Month 022024",
+          "89,183",
+          "0",
+          "10,702",
+          "10,702",
+          "0"
+        ],
+        [
+          "Feb-2024",
+          "11-03-2024",
+          "CR",
+          "Cont. For Due-Month 032024",
+          "89,183",
+          "0",
+          "10,702",
+          "10,702",
+          "0"
+        ],
+        [
+          "Total Contributions for the year [ 2023 ]",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "1,91,978",
+          "1,24,888",
+          "0"
+        ],
+        [
+          "Total Transfer-Ins/VDRs for the year [ 2023 ]",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "Total Withdrawals for the year [ 2023 ]",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "Int. Updated upto 31/03/2024",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "66,133",
+          "20,001",
+          "0"
+        ],
+        [
+          "Deduction of TDS on int on EE Cont Amt above 2.5 L",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "-2,160",
+          "0",
+          "0"
+        ],
+        [
+          "Closing Balance as on 31/03/2024",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "9,42,800",
+          "3,31,258",
+          "0"
+        ]
+      ],
+      [
+        [
+          "Taxable Data for the year [ 2023-2024]",
+          null,
+          null,
+          null
+        ],
+        [
+          "OB Int. Updated upto 01/04/2023",
+          "6,86,849",
+          "4,25,010",
+          "2,61,839"
+        ],
+        [
+          "Cont. Month",
+          "Monthly Contribution",
+          "Cumulative Balance at the end of the Month",
+          null
+        ],
+        [
+          null,
+          null,
+          "Non-Taxable",
+          "Taxable"
+        ],
+        [
+          "Apr-2023",
+          "43,363",
+          "43,363",
+          "0"
+        ],
+        [
+          "May-2023",
+          "43,363",
+          "86,726",
+          "0"
+        ],
+        [
+          "Jun-2023",
+          "9,818",
+          "96,544",
+          "0"
+        ],
+        [
+          "Jul-2023",
+          "9,818",
+          "1,06,362",
+          "0"
+        ],
+        [
+          "Aug-2023",
+          "10,702",
+          "1,17,064",
+          "0"
+        ],
+        [
+          "Sep-2023",
+          "10,702",
+          "1,27,766",
+          "0"
+        ],
+        [
+          "Oct-2023",
+          "10,702",
+          "1,38,468",
+          "0"
+        ],
+        [
+          "Nov-2023",
+          "10,702",
+          "1,49,170",
+          "0"
+        ],
+        [
+          "Dec-2023",
+          "10,702",
+          "1,59,872",
+          "0"
+        ],
+        [
+          "Jan-2024",
+          "10,702",
+          "1,70,574",
+          "0"
+        ],
+        [
+          "Feb-2024",
+          "10,702",
+          "1,81,276",
+          "0"
+        ],
+        [
+          "Mar-2024",
+          "10,702",
+          "1,91,978",
+          "0"
+        ],
+        [
+          "TOTAL",
+          "1,91,978",
+          "1,91,978",
+          "0"
+        ],
+        [
+          "Deduction of TDS on int on EE Cont\nAmt above 2.5 L",
+          "0",
+          "0",
+          "-2,160"
+        ],
+        [
+          "Int. Updated upto 31/03/2024",
+          "66,133",
+          "44,531",
+          "21,602"
+        ],
+        [
+          "Closing Balance as on 31/03/2024",
+          "9,42,800",
+          "6,61,519",
+          "2,81,281"
+        ]
+      ]
+    ]
+  },
+  "BGBNG00233900000104179_2024.pdf": {
+    "data": [
+      [
+        [
+          "fooj.k / Particulars",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "deZpkjh 'ks\"k /\nEmployee\nBalance",
+          "fu;ks\u00e4k 'ks\"k /\nEmployer\nBalance",
+          "isa'ku 'ks\"k /\nPension\nBalance"
+        ],
+        [
+          "OB Int. Updated upto 01/04/2024",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "9,42,800",
+          "3,31,258",
+          "0"
+        ],
+        [
+          "osru ekg /\nWage Month",
+          "V\u00aakalD'ku / Transaction",
+          null,
+          "fooj.k / Particulars",
+          "osru / Wages",
+          null,
+          "va'knku / Contribution",
+          null,
+          null
+        ],
+        [
+          null,
+          "fnuk\u00a1d / Date",
+          "\u00e7dkj\n/ Type",
+          null,
+          "bZ ih ,Q / EPF",
+          "bZ ih ,l / EPS",
+          "deZpkjh /\nEmployee",
+          "fu;ks\u00e4k /\nEmployer",
+          "isa'ku /\nPension"
+        ],
+        [
+          "Mar-2024",
+          "10-04-2024",
+          "CR",
+          "Cont. For Due-Month 042024",
+          "89,183",
+          "0",
+          "10,702",
+          "10,702",
+          "0"
+        ],
+        [
+          "Apr-2024",
+          "12-05-2024",
+          "CR",
+          "Cont. For Due-Month 052024",
+          "89,183",
+          "0",
+          "10,702",
+          "10,702",
+          "0"
+        ],
+        [
+          "May-2024",
+          "11-06-2024",
+          "CR",
+          "Cont. For Due-Month 062024",
+          "89,183",
+          "0",
+          "10,702",
+          "10,702",
+          "0"
+        ],
+        [
+          "Jun-2024",
+          "12-07-2024",
+          "CR",
+          "Cont. For Due-Month 072024",
+          "89,183",
+          "0",
+          "10,702",
+          "10,702",
+          "0"
+        ],
+        [
+          "Jul-2024",
+          "13-08-2024",
+          "CR",
+          "Cont. For Due-Month 082024",
+          "89,183",
+          "0",
+          "10,702",
+          "10,702",
+          "0"
+        ],
+        [
+          "Aug-2024",
+          "12-09-2024",
+          "CR",
+          "Cont. For Due-Month 092024",
+          "89,183",
+          "0",
+          "10,702",
+          "10,702",
+          "0"
+        ],
+        [
+          "Sep-2024",
+          "14-10-2024",
+          "CR",
+          "Cont. For Due-Month 102024",
+          "89,183",
+          "0",
+          "10,702",
+          "10,702",
+          "0"
+        ],
+        [
+          "Oct-2024",
+          "12-11-2024",
+          "CR",
+          "Cont. For Due-Month 112024",
+          "96,433",
+          "0",
+          "11,572",
+          "11,572",
+          "0"
+        ],
+        [
+          "Nov-2024",
+          "10-12-2024",
+          "CR",
+          "Cont. For Due-Month 122024",
+          "96,433",
+          "0",
+          "11,572",
+          "11,572",
+          "0"
+        ],
+        [
+          "Dec-2024",
+          "09-01-2025",
+          "CR",
+          "Cont. For Due-Month 012025",
+          "96,433",
+          "0",
+          "11,572",
+          "11,572",
+          "0"
+        ],
+        [
+          "Jan-2025",
+          "12-02-2025",
+          "CR",
+          "Cont. For Due-Month 022025",
+          "96,433",
+          "0",
+          "11,572",
+          "11,572",
+          "0"
+        ],
+        [
+          "Feb-2025",
+          "12-03-2025",
+          "CR",
+          "Cont. For Due-Month 032025",
+          "96,433",
+          "0",
+          "11,572",
+          "11,572",
+          "0"
+        ],
+        [
+          "Total Contributions for the year [ 2024 ]",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "1,32,774",
+          "1,32,774",
+          "0"
+        ],
+        [
+          "Total Transfer-Ins/VDRs for the year [ 2024 ]",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "Total Withdrawals for the year [ 2024 ]",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "Int. Updated upto 31/03/2025",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "82,697",
+          "32,245",
+          "0"
+        ],
+        [
+          "Deduction of TDS on int on EE Cont Amt above 2.5 L",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "-2,321",
+          "0",
+          "0"
+        ],
+        [
+          "Closing Balance as on 31/03/2025",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "11,55,950",
+          "4,96,277",
+          "0"
+        ]
+      ],
+      [
+        [
+          "Taxable Data for the year [ 2024-2025]",
+          null,
+          null,
+          null
+        ],
+        [
+          "OB Int. Updated upto 01/04/2024",
+          "9,42,800",
+          "6,61,519",
+          "2,81,281"
+        ],
+        [
+          "Cont. Month",
+          "Monthly Contribution",
+          "Cumulative Balance at the end of the Month",
+          null
+        ],
+        [
+          null,
+          null,
+          "Non-Taxable",
+          "Taxable"
+        ],
+        [
+          "Apr-2024",
+          "10,702",
+          "10,702",
+          "0"
+        ],
+        [
+          "May-2024",
+          "10,702",
+          "21,404",
+          "0"
+        ],
+        [
+          "Jun-2024",
+          "10,702",
+          "32,106",
+          "0"
+        ],
+        [
+          "Jul-2024",
+          "10,702",
+          "42,808",
+          "0"
+        ],
+        [
+          "Aug-2024",
+          "10,702",
+          "53,510",
+          "0"
+        ],
+        [
+          "Sep-2024",
+          "10,702",
+          "64,212",
+          "0"
+        ],
+        [
+          "Oct-2024",
+          "10,702",
+          "74,914",
+          "0"
+        ],
+        [
+          "Nov-2024",
+          "11,572",
+          "86,486",
+          "0"
+        ],
+        [
+          "Dec-2024",
+          "11,572",
+          "98,058",
+          "0"
+        ],
+        [
+          "Jan-2025",
+          "11,572",
+          "1,09,630",
+          "0"
+        ],
+        [
+          "Feb-2025",
+          "11,572",
+          "1,21,202",
+          "0"
+        ],
+        [
+          "Mar-2025",
+          "11,572",
+          "1,32,774",
+          "0"
+        ],
+        [
+          "TOTAL",
+          "1,32,774",
+          "1,32,774",
+          "0"
+        ],
+        [
+          "Deduction of TDS on int on EE Cont\nAmt above 2.5 L",
+          "0",
+          "0",
+          "-2,321"
+        ],
+        [
+          "Int. Updated upto 31/03/2025",
+          "82,697",
+          "59,491",
+          "23,206"
+        ],
+        [
+          "Closing Balance as on 31/03/2025",
+          "11,55,950",
+          "8,53,784",
+          "3,02,166"
+        ]
+      ]
+    ]
+  },
+  "BGBNG00233900000104179_2025.pdf": {
+    "data": [
+      [
+        [
+          "fooj.k / Particulars",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "deZpkjh 'ks\"k /\nEmployee\nBalance",
+          "fu;ks\u00e4k 'ks\"k /\nEmployer\nBalance",
+          "isa'ku 'ks\"k /\nPension\nBalance"
+        ],
+        [
+          "OB Int. Updated upto 01/04/2025",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "11,55,950",
+          "4,96,277",
+          "0"
+        ],
+        [
+          "osru ekg /\nWage Month",
+          "V\u00aakalD'ku / Transaction",
+          null,
+          "fooj.k / Particulars",
+          "osru / Wages",
+          null,
+          "va'knku / Contribution",
+          null,
+          null
+        ],
+        [
+          null,
+          "fnuk\u00a1d / Date",
+          "\u00e7dkj\n/ Type",
+          null,
+          "bZ ih ,Q / EPF",
+          "bZ ih ,l / EPS",
+          "deZpkjh /\nEmployee",
+          "fu;ks\u00e4k /\nEmployer",
+          "isa'ku /\nPension"
+        ],
+        [
+          "Mar-2025",
+          "14-04-2025",
+          "CR",
+          "Cont. For Due-Month 042025",
+          "96,433",
+          "0",
+          "11,572",
+          "11,572",
+          "0"
+        ],
+        [
+          "Apr-2025",
+          "13-05-2025",
+          "CR",
+          "Cont. For Due-Month 052025",
+          "96,433",
+          "0",
+          "21,215",
+          "11,572",
+          "0"
+        ],
+        [
+          "May-2025",
+          "11-06-2025",
+          "CR",
+          "Cont. For Due-Month 062025",
+          "96,433",
+          "0",
+          "21,215",
+          "11,572",
+          "0"
+        ],
+        [
+          "Jun-2025",
+          "14-07-2025",
+          "CR",
+          "Cont. For Due-Month 072025",
+          "96,433",
+          "0",
+          "21,215",
+          "11,572",
+          "0"
+        ],
+        [
+          "Jul-2025",
+          "12-08-2025",
+          "CR",
+          "Cont. For Due-Month 082025",
+          "96,433",
+          "0",
+          "21,215",
+          "11,572",
+          "0"
+        ],
+        [
+          "Aug-2025",
+          "12-09-2025",
+          "CR",
+          "Cont. For Due-Month 092025",
+          "96,433",
+          "0",
+          "21,215",
+          "11,572",
+          "0"
+        ],
+        [
+          "Sep-2025",
+          "13-10-2025",
+          "CR",
+          "Cont. For Due-Month 102025",
+          "96,433",
+          "0",
+          "21,215",
+          "11,572",
+          "0"
+        ],
+        [
+          "Oct-2025",
+          "13-11-2025",
+          "CR",
+          "Cont. For Due-Month 112025",
+          "98,842",
+          "0",
+          "21,745",
+          "11,861",
+          "0"
+        ],
+        [
+          "Nov-2025",
+          "11-12-2025",
+          "CR",
+          "Cont. For Due-Month 122025",
+          "98,842",
+          "0",
+          "25,699",
+          "11,861",
+          "0"
+        ],
+        [
+          "Dec-2025",
+          "12-01-2026",
+          "CR",
+          "Cont. For Due-Month 012026",
+          "98,842",
+          "0",
+          "25,699",
+          "11,861",
+          "0"
+        ],
+        [
+          "Total Contributions for the year [ 2025 ]",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "2,12,005",
+          "1,16,587",
+          "0"
+        ],
+        [
+          "Total Transfer-Ins/VDRs for the year [ 2025 ]",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "Total Withdrawals for the year [ 2025 ]",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "Interest details N/A",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "Closing Balance as on 31/03/2026",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "13,67,955",
+          "6,12,864",
+          "0"
+        ]
+      ],
+      [
+        [
+          "Taxable Data for the year [ 2025-2026]",
+          null,
+          null,
+          null
+        ],
+        [
+          "OB Int. Updated upto 01/04/2025",
+          "11,55,950",
+          "8,53,784",
+          "3,02,166"
+        ],
+        [
+          "Cont. Month",
+          "Monthly Contribution",
+          "Cumulative Balance at the end of the Month",
+          null
+        ],
+        [
+          null,
+          null,
+          "Non-Taxable",
+          "Taxable"
+        ],
+        [
+          "Apr-2025",
+          "11,572",
+          "11,572",
+          "0"
+        ],
+        [
+          "May-2025",
+          "21,215",
+          "32,787",
+          "0"
+        ],
+        [
+          "Jun-2025",
+          "21,215",
+          "54,002",
+          "0"
+        ],
+        [
+          "Jul-2025",
+          "21,215",
+          "75,217",
+          "0"
+        ],
+        [
+          "Aug-2025",
+          "21,215",
+          "96,432",
+          "0"
+        ],
+        [
+          "Sep-2025",
+          "21,215",
+          "1,17,647",
+          "0"
+        ],
+        [
+          "Oct-2025",
+          "21,215",
+          "1,38,862",
+          "0"
+        ],
+        [
+          "Nov-2025",
+          "21,745",
+          "1,60,607",
+          "0"
+        ],
+        [
+          "Dec-2025",
+          "25,699",
+          "1,86,306",
+          "0"
+        ],
+        [
+          "Jan-2026",
+          "25,699",
+          "2,12,005",
+          "0"
+        ],
+        [
+          "Feb-2026",
+          "0",
+          "2,12,005",
+          "0"
+        ],
+        [
+          "Mar-2026",
+          "0",
+          "2,12,005",
+          "0"
+        ],
+        [
+          "TOTAL",
+          "2,12,005",
+          "2,12,005",
+          "0"
+        ],
+        [
+          "Int. Updated upto 31/03/2026",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "Closing Balance as on 31/03/2026",
+          "13,67,955",
+          "10,65,789",
+          "3,02,166"
+        ]
+      ]
+    ]
+  }
+}

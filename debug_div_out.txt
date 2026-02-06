@@ -1,0 +1,23 @@
+Dividend Category ID: 95bc9ba0-eba5-4ad5-8c08-adce7660710f
+Total Transactions with this Category: 49
+Transactions with type 'income': 49
+Transactions with other types: 0
+
+
+Sample Transaction:
+{
+  "id": "6ba968fb-8cad-4103-8cf0-2c6fc755e9c4",
+  "amount": "65.15",
+  "debit": "0.00",
+  "credit": "65.15",
+  "transactionDate": "2025-04-17",
+  "description": "ITCHOTELS",
+  "type": "income",
+  "transferAccountId": null,
+  "linkedTransactionId": null,
+  "scrip": "ITCHOTELS",
+  "createdAt": "2026-02-05T02:45:01.723Z",
+  "updatedAt": "2026-02-05T05:28:45.482Z",
+  "AccountId": "12ac98e6-8c1a-435a-a307-501939be9d6d",
+  "CashflowCategoryId": "95bc9ba0-eba5-4ad5-8c08-adce7660710f"
+}
