@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Shield, CheckCircle, Copy, AlertCircle } from 'lucide-react';
 import api from '../services/api';
@@ -9,6 +9,13 @@ const TwoFactorSetup = () => {
     const [token, setToken] = useState('');
     const [status, setStatus] = useState('idle'); // idle, loading, setup, verifying, success, error
     const [errorMessage, setErrorMessage] = useState('');
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        if (user.isTwoFactorEnabled) {
+            setStatus('enabled');
+        }
+    }, []);
 
     const startSetup = async () => {
         setStatus('loading');
@@ -39,14 +46,53 @@ const TwoFactorSetup = () => {
         }
     };
 
-    if (status === 'success') {
+    const disable2FA = async () => {
+        if (!window.confirm('Are you sure you want to disable 2-Step Verification? Your account will be less secure.')) {
+            return;
+        }
+
+        setStatus('loading');
+        try {
+            await api.post('/auth/2fa/disable');
+
+            // Update local user state
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            user.isTwoFactorEnabled = false;
+            localStorage.setItem('user', JSON.stringify(user));
+
+            setStatus('idle');
+        } catch (err) {
+            setErrorMessage(err.response?.data?.error || 'Failed to disable 2FA');
+            setStatus('enabled');
+        }
+    };
+
+    if (status === 'success' || status === 'enabled') {
         return (
             <div style={containerStyle}>
                 <CheckCircle size={48} color="var(--accent)" style={{ marginBottom: '1rem' }} />
-                <h3>2FA Successfully Enabled</h3>
-                <p style={{ color: 'var(--text-muted)', textAlign: 'center' }}>
-                    Your account is now protected with 2-Step Verification.
+                <h3>{status === 'success' ? '2FA Successfully Enabled' : '2FA is Active'}</h3>
+                <p style={{ color: 'var(--text-muted)', textAlign: 'center', marginBottom: '1.5rem' }}>
+                    {status === 'success'
+                        ? 'Your account is now protected with 2-Step Verification.'
+                        : 'Your account is currently protected with 2-Step Verification.'}
                 </p>
+
+                {status === 'enabled' && (
+                    <button
+                        onClick={disable2FA}
+                        className="btn-secondary"
+                        style={{
+                            fontSize: '0.9rem',
+                            padding: '0.5rem 1rem',
+                            color: '#ef4444',
+                            borderColor: 'rgba(239, 68, 68, 0.3)',
+                            background: 'rgba(239, 68, 68, 0.05)'
+                        }}
+                    >
+                        Disable 2-Step Verification
+                    </button>
+                )}
             </div>
         );
     }

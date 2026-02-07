@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
-import { Plus, Trash2, X, AlertCircle, CheckCircle2, Landmark } from 'lucide-react';
+import { Plus, Trash2, X, AlertCircle, CheckCircle2, Landmark, Filter, Search, ChevronDown, ChevronRight, ArrowRight } from 'lucide-react';
 import { formatIndianRupee } from '../utils/formatCurrency';
 import api from '../services/api';
 
@@ -11,6 +11,25 @@ const AccountingJournals = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editJournalId, setEditJournalId] = useState(null);
     const [fdModalType, setFdModalType] = useState(null); // 'create' | 'interest' | 'tds' | 'mature'
+
+    // Expanded Row State
+    const [expandedRows, setExpandedRows] = useState(new Set());
+
+    // Filter State
+    const [filters, setFilters] = useState({
+        search: '',
+        startDate: '',
+        endDate: '',
+        minAmount: '',
+        maxAmount: '',
+        accountId: '',
+        referenceType: '',
+        accountType: ''
+    });
+    const [showFilters, setShowFilters] = useState(false);
+
+    // Sorting State
+    const [sortConfig, setSortConfig] = useState({ key: 'transactionDate', direction: 'desc' });
 
     // FD Quick Action Form State
     const [fdForm, setFdForm] = useState({
@@ -48,6 +67,7 @@ const AccountingJournals = () => {
 
     const fetchInitialData = async () => {
         try {
+            setLoading(true);
             const [journalRes, coaRes] = await Promise.all([
                 api.get('/accounting/journals'),
                 api.get('/accounting/coa')
@@ -60,6 +80,96 @@ const AccountingJournals = () => {
             setLoading(false);
         }
     };
+
+    // Derived unique reference types for filter dropdown
+    const uniqueReferenceTypes = useMemo(() => {
+        const types = new Set(journals.map(j => j.referenceType || 'Manual'));
+        return Array.from(types).sort();
+    }, [journals]);
+
+    // Sorting Helper
+    const requestSort = (key) => {
+        let direction = 'asc';
+        if (sortConfig.key === key && sortConfig.direction === 'asc') {
+            direction = 'desc';
+        }
+        setSortConfig({ key, direction });
+    };
+
+    // Filter and Sort Logic
+    const filteredJournals = useMemo(() => {
+        let result = journals.filter(journal => {
+            // Search (Description or ID)
+            if (filters.search) {
+                const searchLower = filters.search.toLowerCase();
+                if (!journal.description?.toLowerCase().includes(searchLower) &&
+                    !journal.id.toLowerCase().includes(searchLower)) {
+                    return false;
+                }
+            }
+
+            // Date Range
+            if (filters.startDate && journal.transactionDate < filters.startDate) return false;
+            if (filters.endDate && journal.transactionDate > filters.endDate) return false;
+
+            // Amount Range (Total Debit of the journal)
+            const totalAmount = journal.LedgerPostings.reduce((sum, p) => sum + parseFloat(p.debit), 0);
+            if (filters.minAmount && totalAmount < parseFloat(filters.minAmount)) return false;
+            if (filters.maxAmount && totalAmount > parseFloat(filters.maxAmount)) return false;
+
+            // Account Filter
+            if (filters.accountId) {
+                const hasAccount = journal.LedgerPostings.some(p => p.ledgerAccountId === filters.accountId);
+                if (!hasAccount) return false;
+            }
+
+            // Reference Type Filter
+            if (filters.referenceType) {
+                const currentType = journal.referenceType || 'Manual';
+                if (currentType !== filters.referenceType) return false;
+            }
+
+            // Account Type Filter (e.g. show journals containing an Expense account)
+            if (filters.accountType) {
+                const hasAccountType = journal.LedgerPostings.some(p => p.LedgerAccount?.type === filters.accountType);
+                if (!hasAccountType) return false;
+            }
+
+            return true;
+        });
+
+        // Sorting
+        return result.sort((a, b) => {
+            if (sortConfig.key === 'amount') {
+                const amountA = a.LedgerPostings.reduce((sum, p) => sum + parseFloat(p.debit), 0);
+                const amountB = b.LedgerPostings.reduce((sum, p) => sum + parseFloat(p.debit), 0);
+                return sortConfig.direction === 'asc' ? amountA - amountB : amountB - amountA;
+            }
+
+            let valA = a[sortConfig.key] || '';
+            let valB = b[sortConfig.key] || '';
+
+            if (sortConfig.key === 'referenceType') {
+                valA = a.referenceType || 'Manual';
+                valB = b.referenceType || 'Manual';
+            }
+
+            if (valA < valB) return sortConfig.direction === 'asc' ? -1 : 1;
+            if (valA > valB) return sortConfig.direction === 'asc' ? 1 : -1;
+            return 0;
+        });
+    }, [journals, filters, sortConfig]);
+
+    const toggleRow = (id) => {
+        const newExpanded = new Set(expandedRows);
+        if (newExpanded.has(id)) {
+            newExpanded.delete(id);
+        } else {
+            newExpanded.add(id);
+        }
+        setExpandedRows(newExpanded);
+    };
+
 
     const addPostingLine = () => {
         setFormData({
@@ -195,86 +305,275 @@ const AccountingJournals = () => {
     if (loading) return <div className="loading">Loading Journal Entries...</div>;
 
     return (
-        <section className="journal-section">
-            <div className="header" style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <section className="journal-section" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+            {/* Header Area */}
+            <div className="header" style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
                     <h2>Accounting Journals</h2>
                     <p style={{ color: 'var(--text-muted)' }}>Double-entry ledger history</p>
                 </div>
                 <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                     <button className="btn outline" onClick={() => setFdModalType('create')} title="Create FD">
-                        <Landmark size={16} /> Create FD
+                        <Landmark size={16} /> FD
                     </button>
-                    <button className="btn outline" onClick={() => setFdModalType('interest')} title="Accrue Interest">
-                        <Plus size={16} /> Accrue Interest
-                    </button>
-                    <button className="btn outline" onClick={() => setFdModalType('tds')} title="Record TDS">
-                        <Plus size={16} /> TDS
-                    </button>
-                    <button className="btn outline" onClick={() => setFdModalType('mature')} title="FD Maturity">
-                        <Landmark size={16} /> FD Maturity
-                    </button>
-                    <button className="btn" onClick={() => setIsModalOpen(true)}>
+                    <button className="btn outline" onClick={() => setIsModalOpen(true)}>
                         <Plus size={18} /> New Journal
                     </button>
                 </div>
             </div>
 
-            <div className="journals-list">
-                {journals.map(journal => (
-                    <div key={journal.id} className="card" style={{ marginBottom: '1.5rem', padding: '0' }}>
-                        <div style={{
-                            padding: '1rem 1.5rem',
-                            background: 'rgba(255,255,255,0.03)',
-                            borderBottom: '1px solid #2d3748',
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center'
-                        }}>
-                            <div>
-                                <span style={{ color: 'var(--accent)', fontWeight: 'bold', marginRight: '1rem' }}>{journal.transactionDate}</span>
-                                <span style={{ fontWeight: '600' }}>{journal.description}</span>
-                            </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                <div style={{ display: 'flex', gap: '0.5rem' }}>
-                                    <button className="action-btn" onClick={() => handleEdit(journal)} title="Edit Journal">
-                                        <Landmark size={14} style={{ color: 'var(--primary)' }} />
-                                    </button>
-                                    <button className="action-btn delete" onClick={() => handleDelete(journal.id)} title="Delete Journal">
-                                        <Trash2 size={14} />
-                                    </button>
-                                </div>
+            {/* Filter Bar */}
+            <div style={{
+                background: 'rgba(255,255,255,0.03)',
+                padding: '1rem',
+                borderRadius: '0.75rem',
+                marginBottom: '1rem',
+                border: '1px solid var(--border)'
+            }}>
+                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                    <div style={{ position: 'relative', flex: 1, minWidth: '200px' }}>
+                        <Search size={16} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                        <input
+                            type="text"
+                            placeholder="Search description or ID..."
+                            value={filters.search}
+                            onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+                            style={{ width: '100%', paddingLeft: '32px', background: 'var(--bg-color)', border: '1px solid var(--border)' }}
+                        />
+                    </div>
+                    <button
+                        className={`btn ${showFilters ? '' : 'outline'}`}
+                        onClick={() => setShowFilters(!showFilters)}
+                        style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+                    >
+                        <Filter size={16} /> Filters
+                    </button>
+                </div>
 
-                            </div>
+                {/* Extended Filters */}
+                {showFilters && (
+                    <div style={{
+                        marginTop: '1rem',
+                        paddingTop: '1rem',
+                        borderTop: '1px solid var(--border)',
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+                        gap: '1rem'
+                    }}>
+                        <div className="form-group" style={{ marginBottom: 0 }}>
+                            <label style={{ fontSize: '0.75rem' }}>Account</label>
+                            <select
+                                value={filters.accountId}
+                                onChange={(e) => setFilters({ ...filters, accountId: e.target.value })}
+                                style={{ padding: '0.5rem', fontSize: '0.875rem' }}
+                            >
+                                <option value="">All Accounts</option>
+                                {coa.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
+                            </select>
                         </div>
-                        <div style={{ padding: '0.5rem 1.5rem' }}>
-                            <table style={{ background: 'transparent' }}>
-                                <thead>
-                                    <tr>
-                                        <th style={{ textAlign: 'left' }}>Account</th>
-                                        <th style={{ textAlign: 'right', width: '150px' }}>Debit</th>
-                                        <th style={{ textAlign: 'right', width: '150px' }}>Credit</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {journal.LedgerPostings.map(post => (
-                                        <tr key={post.id} style={{ borderBottom: '1px solid #1a202c' }}>
-                                            <td style={{ color: 'var(--text-primary)' }}>{post.LedgerAccount?.name}</td>
-                                            <td style={{ textAlign: 'right', color: parseFloat(post.debit) > 0 ? 'var(--accent)' : 'var(--text-muted)' }}>
-                                                {parseFloat(post.debit) > 0 ? formatIndianRupee(post.debit) : '-'}
-                                            </td>
-                                            <td style={{ textAlign: 'right', color: parseFloat(post.credit) > 0 ? '#ef4444' : 'var(--text-muted)' }}>
-                                                {parseFloat(post.credit) > 0 ? formatIndianRupee(post.credit) : '-'}
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                        <div className="form-group" style={{ marginBottom: 0 }}>
+                            <label style={{ fontSize: '0.75rem' }}>Account Type</label>
+                            <select
+                                value={filters.accountType}
+                                onChange={(e) => setFilters({ ...filters, accountType: e.target.value })}
+                                style={{ padding: '0.5rem', fontSize: '0.875rem' }}
+                            >
+                                <option value="">All Types</option>
+                                {['Asset', 'Liability', 'Equity', 'Revenue', 'Expense'].map(t => <option key={t} value={t}>{t}</option>)}
+                            </select>
+                        </div>
+                        <div className="form-group" style={{ marginBottom: 0 }}>
+                            <label style={{ fontSize: '0.75rem' }}>Type</label>
+                            <select
+                                value={filters.referenceType}
+                                onChange={(e) => setFilters({ ...filters, referenceType: e.target.value })}
+                                style={{ padding: '0.5rem', fontSize: '0.875rem' }}
+                            >
+                                <option value="">All Types</option>
+                                {uniqueReferenceTypes.map(t => <option key={t} value={t}>{t}</option>)}
+                            </select>
+                        </div>
+                        <div className="form-group" style={{ marginBottom: 0 }}>
+                            <label style={{ fontSize: '0.75rem' }}>From Date</label>
+                            <input
+                                type="date"
+                                value={filters.startDate}
+                                onChange={(e) => setFilters({ ...filters, startDate: e.target.value })}
+                                style={{ padding: '0.5rem', fontSize: '0.875rem' }}
+                            />
+                        </div>
+                        <div className="form-group" style={{ marginBottom: 0 }}>
+                            <label style={{ fontSize: '0.75rem' }}>To Date</label>
+                            <input
+                                type="date"
+                                value={filters.endDate}
+                                onChange={(e) => setFilters({ ...filters, endDate: e.target.value })}
+                                style={{ padding: '0.5rem', fontSize: '0.875rem' }}
+                            />
+                        </div>
+                        <div className="form-group" style={{ marginBottom: 0 }}>
+                            <label style={{ fontSize: '0.75rem' }}>Min Amount</label>
+                            <input
+                                type="number"
+                                placeholder="0.00"
+                                value={filters.minAmount}
+                                onChange={(e) => setFilters({ ...filters, minAmount: e.target.value })}
+                                style={{ padding: '0.5rem', fontSize: '0.875rem' }}
+                            />
                         </div>
                     </div>
-                ))}
+                )}
             </div>
 
+            {/* Journal Table */}
+            <div style={{ flex: 1, overflowY: 'auto', border: '1px solid var(--border)', borderRadius: '0.75rem' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
+                    <thead style={{ position: 'sticky', top: 0, background: 'var(--bg-color)', zIndex: 10 }}>
+                        <tr style={{ borderBottom: '1px solid var(--border)', background: 'rgba(255,255,255,0.02)' }}>
+                            <th style={{ padding: '0.75rem 1rem', textAlign: 'left', width: '40px' }}></th>
+                            <th
+                                style={{ padding: '0.75rem 1rem', textAlign: 'left', width: '120px', cursor: 'pointer', userSelect: 'none' }}
+                                onClick={() => requestSort('transactionDate')}
+                            >
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                                    Date
+                                    {sortConfig.key === 'transactionDate' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                                </div>
+                            </th>
+                            <th
+                                style={{ padding: '0.75rem 1rem', textAlign: 'left', cursor: 'pointer', userSelect: 'none' }}
+                                onClick={() => requestSort('description')}
+                            >
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                                    Reference / Description
+                                    {sortConfig.key === 'description' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                                </div>
+                            </th>
+                            <th
+                                style={{ padding: '0.75rem 1rem', textAlign: 'left', width: '200px', cursor: 'pointer', userSelect: 'none' }}
+                                onClick={() => requestSort('referenceType')}
+                            >
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                                    Type
+                                    {sortConfig.key === 'referenceType' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                                </div>
+                            </th>
+                            <th
+                                style={{ padding: '0.75rem 1rem', textAlign: 'right', width: '150px', cursor: 'pointer', userSelect: 'none' }}
+                                onClick={() => requestSort('amount')}
+                            >
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '0.25rem' }}>
+                                    Amount
+                                    {sortConfig.key === 'amount' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                                </div>
+                            </th>
+                            <th style={{ padding: '0.75rem 1rem', textAlign: 'right', width: '100px' }}>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filteredJournals.length > 0 ? (
+                            filteredJournals.map(journal => {
+                                const totalAmount = journal.LedgerPostings.reduce((sum, p) => sum + parseFloat(p.debit), 0);
+                                const isExpanded = expandedRows.has(journal.id);
+
+                                return (
+                                    <React.Fragment key={journal.id}>
+                                        <tr
+                                            onClick={() => toggleRow(journal.id)}
+                                            style={{
+                                                borderBottom: isExpanded ? 'none' : '1px solid var(--border)',
+                                                cursor: 'pointer',
+                                                background: isExpanded ? 'rgba(255,255,255,0.02)' : 'transparent',
+                                                transition: 'background 0.2s'
+                                            }}
+                                            className="journal-row"
+                                        >
+                                            <td style={{ padding: '0.75rem 1rem', textAlign: 'center' }}>
+                                                {isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+                                            </td>
+                                            <td style={{ padding: '0.75rem 1rem', color: 'var(--text-main)' }}>{journal.transactionDate}</td>
+                                            <td style={{ padding: '0.75rem 1rem' }}>
+                                                <div style={{ fontWeight: '500', color: 'var(--text-main)' }}>{journal.description}</div>
+                                                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{journal.referenceType} #{journal.referenceId?.slice(0, 8)}</div>
+                                            </td>
+                                            <td style={{ padding: '0.75rem 1rem', color: 'var(--text-muted)' }}>
+                                                {journal.referenceType || 'Manual'}
+                                            </td>
+                                            <td style={{ padding: '0.75rem 1rem', textAlign: 'right', fontWeight: '600' }}>
+                                                {formatIndianRupee(totalAmount)}
+                                            </td>
+                                            <td style={{ padding: '0.75rem 1rem', textAlign: 'right' }} onClick={e => e.stopPropagation()}>
+                                                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem' }}>
+                                                    <button className="action-btn" onClick={() => handleEdit(journal)} title="Edit">
+                                                        <Landmark size={14} />
+                                                    </button>
+                                                    <button className="action-btn delete" onClick={() => handleDelete(journal.id)} title="Delete">
+                                                        <Trash2 size={14} />
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {isExpanded && (
+                                            <tr style={{ background: 'rgba(255,255,255,0.02)', borderBottom: '1px solid var(--border)' }}>
+                                                <td colSpan={6} style={{ padding: '0 1rem 1rem 3rem' }}>
+                                                    <div style={{
+                                                        background: 'rgba(0,0,0,0.2)',
+                                                        borderRadius: '0.5rem',
+                                                        padding: '0.5rem',
+                                                        border: '1px solid var(--border)'
+                                                    }}>
+                                                        <table style={{ width: '100%', fontSize: '0.8rem' }}>
+                                                            <thead>
+                                                                <tr>
+                                                                    <th style={{ textAlign: 'left', padding: '0.5rem', color: 'var(--text-muted)' }}>Ledger Account</th>
+                                                                    <th style={{ textAlign: 'right', padding: '0.5rem', color: 'var(--text-muted)' }}>Debit</th>
+                                                                    <th style={{ textAlign: 'right', padding: '0.5rem', color: 'var(--text-muted)' }}>Credit</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {journal.LedgerPostings.map(post => (
+                                                                    <tr key={post.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                                                                        <td style={{ padding: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                                            {post.LedgerAccount?.name}
+                                                                            <span style={{
+                                                                                fontSize: '0.7rem',
+                                                                                padding: '0.1rem 0.3rem',
+                                                                                borderRadius: '0.2rem',
+                                                                                background: 'rgba(255,255,255,0.1)',
+                                                                                color: 'var(--text-muted)'
+                                                                            }}>
+                                                                                {post.LedgerAccount?.type}
+                                                                            </span>
+                                                                        </td>
+                                                                        <td style={{ padding: '0.5rem', textAlign: 'right', color: parseFloat(post.debit) > 0 ? 'var(--accent)' : 'var(--text-muted)' }}>
+                                                                            {parseFloat(post.debit) > 0 ? formatIndianRupee(post.debit) : '-'}
+                                                                        </td>
+                                                                        <td style={{ padding: '0.5rem', textAlign: 'right', color: parseFloat(post.credit) > 0 ? '#ef4444' : 'var(--text-muted)' }}>
+                                                                            {parseFloat(post.credit) > 0 ? formatIndianRupee(post.credit) : '-'}
+                                                                        </td>
+                                                                    </tr>
+                                                                ))}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        )}
+                                    </React.Fragment>
+                                );
+                            })
+                        ) : (
+                            <tr>
+                                <td colSpan={6} style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)' }}>
+                                    No journal entries found matching your filters.
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
+
+            {/* Modal - Same as before but kept for context */}
             {isModalOpen && (
                 <div className="modal-overlay">
                     <div className="modal" style={{ maxWidth: '900px', width: '95%', padding: '2.5rem' }}>
@@ -505,7 +804,7 @@ const AccountingJournals = () => {
                 </div>
             )}
 
-            {/* FD Quick Action Modal */}
+            {/* FD Quick Action Modal - Kept same logic, just minor style updates if needed */}
             {fdModalType && (
                 <div className="modal-overlay">
                     <div className="modal" style={{ maxWidth: '600px', width: '90%' }}>

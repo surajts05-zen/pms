@@ -4,23 +4,78 @@ const multer = require('multer');
 const { spawn } = require('child_process');
 const path = require('path');
 const fs = require('fs');
-const { Account, Transaction, CashflowTransaction, sequelize } = require('../models');
-const authenticateToken = require('../middleware/auth');
+const { Account, GovtSchemeTransaction, CashflowTransaction, sequelize } = require('../models');
+const { authenticateToken } = require('./auth');
 
 const upload = multer({ dest: 'uploads/' });
 
+// Summary
 router.get('/summary', authenticateToken, async (req, res) => {
     try {
         const account = await Account.findOne({ where: { type: 'pf', UserId: req.user.id } });
         if (!account) return res.json({ balance: 0, count: 0 });
 
-        const count = await Transaction.count({ where: { AccountId: account.id } });
+        const count = await GovtSchemeTransaction.count({ where: { AccountId: account.id } });
         res.json({ balance: account.balance, count });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
 
+// Transactions CRUD
+router.get('/transactions', authenticateToken, async (req, res) => {
+    try {
+        const transactions = await GovtSchemeTransaction.findAll({
+            where: { UserId: req.user.id },
+            order: [['transactionDate', 'DESC']]
+        });
+        res.json(transactions);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+router.post('/transactions', authenticateToken, async (req, res) => {
+    try {
+        const { AccountId, transactionDate, type, amount, notes, description } = req.body;
+        const transaction = await GovtSchemeTransaction.create({
+            AccountId,
+            transactionDate,
+            type,
+            amount,
+            notes,
+            description,
+            UserId: req.user.id
+        });
+        res.status(201).json(transaction);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+
+router.put('/transactions/:id', authenticateToken, async (req, res) => {
+    try {
+        await GovtSchemeTransaction.update(req.body, {
+            where: { id: req.params.id, UserId: req.user.id }
+        });
+        res.json({ success: true });
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+
+router.delete('/transactions/:id', authenticateToken, async (req, res) => {
+    try {
+        await GovtSchemeTransaction.destroy({
+            where: { id: req.params.id, UserId: req.user.id }
+        });
+        res.json({ success: true });
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+
+// Upload
 router.post('/upload', authenticateToken, upload.single('file'), async (req, res) => {
     if (!req.file) {
         return res.status(400).json({ error: 'No file uploaded' });
@@ -52,13 +107,14 @@ router.post('/upload', authenticateToken, upload.single('file'), async (req, res
             const account = await Account.findOne({ where: { type: 'pf', UserId } });
             if (!account) return res.status(404).json({ error: 'PF Account not found' });
 
-            const transactions = await Transaction.findAll({ where: { AccountId: account.id, UserId } });
+            const transactions = await GovtSchemeTransaction.findAll({ where: { AccountId: account.id, UserId } });
             const importedSet = new Set();
             transactions.forEach(t => {
-                const key = `TX|${t.transactionDate}|${parseFloat(t.quantity).toFixed(2)}`;
+                const key = `TX|${t.transactionDate}|${parseFloat(t.amount).toFixed(2)}`;
                 importedSet.add(key);
-                if (t.notes === 'Annual Interest Credited') {
-                    importedSet.add(`INT|${t.transactionDate}|${parseFloat(t.quantity).toFixed(2)}`);
+                // Also check description/notes for Interest
+                if (t.notes === 'Annual Interest Credited' || t.description === 'Annual Interest Credited') {
+                    // importedSet.add(`INT|${t.transactionDate}|${parseFloat(t.amount).toFixed(2)}`);
                 }
             });
 
@@ -84,9 +140,16 @@ router.post('/upload', authenticateToken, upload.single('file'), async (req, res
                         if (dateMatch) {
                             const date = `${dateMatch[3]}-${dateMatch[2]}-${dateMatch[1]}`;
                             const totalInt = parseFloat((row[6] || '0').replace(/,/g, '')) + parseFloat((row[7] || '0').replace(/,/g, ''));
-                            const key = `INT|${date}|${totalInt.toFixed(2)}`;
+                            const key = `TX|${date}|${totalInt.toFixed(2)}`;
                             if (totalInt > 0 && !importedSet.has(key)) {
-                                await Transaction.create({ AccountId: account.id, type: 'deposit', transactionDate: date, quantity: totalInt, price: 1, notes: 'Annual Interest Credited', UserId });
+                                await GovtSchemeTransaction.create({
+                                    AccountId: account.id,
+                                    type: 'interest',
+                                    transactionDate: date,
+                                    amount: totalInt,
+                                    notes: 'Annual Interest Credited',
+                                    UserId
+                                });
                                 await CashflowTransaction.create({ AccountId: account.id, amount: totalInt, credit: totalInt, transactionDate: date, description: 'Annual Interest Credited', type: 'income', UserId });
                                 importedSet.add(key);
                                 addedCount++;
@@ -101,7 +164,14 @@ router.post('/upload', authenticateToken, upload.single('file'), async (req, res
                         const total = parseFloat((row[6] || '0').replace(/,/g, '')) + parseFloat((row[7] || '0').replace(/,/g, ''));
                         const key = `TX|${date}|${total.toFixed(2)}`;
                         if (total > 0 && !importedSet.has(key)) {
-                            await Transaction.create({ AccountId: account.id, type: 'deposit', transactionDate: date, quantity: total, price: 1, notes: row[3] || '', UserId });
+                            await GovtSchemeTransaction.create({
+                                AccountId: account.id,
+                                type: 'deposit',
+                                transactionDate: date,
+                                amount: total,
+                                notes: row[3] || '',
+                                UserId
+                            });
                             await CashflowTransaction.create({ AccountId: account.id, amount: total, credit: total, transactionDate: date, description: row[3] || '', type: 'income', UserId });
                             importedSet.add(key);
                             addedCount++;

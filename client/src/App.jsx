@@ -8,6 +8,7 @@ import ChartOfAccounts from './pages/ChartOfAccounts';
 import AccountingJournals from './pages/AccountingJournals';
 import ProfitLoss from './pages/ProfitLoss';
 import BalanceSheet from './pages/BalanceSheet';
+import AnnualCashflow from './pages/AnnualCashflow';
 import Settings from './pages/Settings';
 import Login from './pages/Login';
 import {
@@ -29,6 +30,7 @@ import {
     Lock,
     Settings as SettingsIcon
 } from 'lucide-react';
+import InstrumentSearch from './components/InstrumentSearch';
 import {
     AreaChart,
     Area,
@@ -72,18 +74,48 @@ function App() {
         setUser(newUser);
         localStorage.setItem('token', newToken);
         localStorage.setItem('user', JSON.stringify(newUser));
+        if (newUser.theme) {
+            setTheme(newUser.theme);
+        }
     };
 
     const handleLogout = () => {
         setToken(null);
         setUser(null);
+        setTheme('dark'); // Default to dark on logout
         localStorage.removeItem('token');
         localStorage.removeItem('user');
     };
 
-    if (!user) {
-        return <Login onLoginSuccess={handleLoginSuccess} />;
-    }
+    const [theme, setTheme] = useState(() => {
+        if (user && user.theme) return user.theme;
+        return localStorage.getItem('theme') || 'dark';
+    });
+
+    useEffect(() => {
+        document.body.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+    }, [theme]);
+
+    const toggleTheme = async (newTheme) => {
+        setTheme(newTheme);
+        if (user) {
+            try {
+                // Optimistically update local user state
+                const updatedUser = { ...user, theme: newTheme };
+                setUser(updatedUser);
+                localStorage.setItem('user', JSON.stringify(updatedUser));
+
+                // Update backend
+                await api.put('/auth/profile', { theme: newTheme });
+            } catch (err) {
+                console.error('Failed to save theme preference:', err);
+                // Revert on failure? converting to simple console error for now as it's UI pref
+            }
+        }
+    };
+
+
 
     const [activeTab, setActiveTab] = useState('summary');
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -137,10 +169,12 @@ function App() {
     });
 
     useEffect(() => {
-        fetchInitialData();
-        const interval = setInterval(fetchInitialData, 300000); // refresh every 5 mins
-        return () => clearInterval(interval);
-    }, [isModalOpen, activeTab, portfolioFilter]);
+        if (user) {
+            fetchInitialData();
+            const interval = setInterval(fetchInitialData, 300000); // refresh every 5 mins
+            return () => clearInterval(interval);
+        }
+    }, [isModalOpen, activeTab, portfolioFilter, user]);
 
     const fetchInitialData = async () => {
         try {
@@ -170,9 +204,6 @@ function App() {
 
             if (fetchedAccounts.length > 0 && !formData.accountId) {
                 setFormData(prev => ({ ...prev, accountId: fetchedAccounts[0].id }));
-            }
-            if (insRes.data.length > 0 && !formData.instrumentId) {
-                setFormData(prev => ({ ...prev, instrumentId: insRes.data[0].id }));
             }
         } catch (err) {
             console.error('Error fetching data:', err);
@@ -229,8 +260,18 @@ function App() {
         try {
             await api.post('/transactions', formData);
             setIsModalOpen(false);
-            alert('Transaction added successfully!');
+            // alert('Transaction added successfully!'); // Removing alert for better flow
             fetchInitialData();
+            setFormData(prev => ({
+                ...prev,
+                instrumentId: '',
+                type: 'buy',
+                transactionDate: new Date().toISOString().split('T')[0],
+                quantity: '',
+                price: '',
+                fees: 0,
+                notes: ''
+            }));
         } catch (err) {
             alert('Error adding transaction: ' + err.message);
         } finally {
@@ -340,7 +381,7 @@ function App() {
                             <YAxis hide />
                             <Tooltip
                                 contentStyle={{ backgroundColor: '#161a23', border: '1px solid #2d3748', borderRadius: '8px' }}
-                                itemStyle={{ color: '#f8fafc' }}
+                                itemStyle={{ color: 'var(--text-main)' }}
                             />
                             <Area type="monotone" dataKey="value" stroke="var(--primary)" fillOpacity={1} fill="url(#colorValue)" strokeWidth={3} />
                         </AreaChart>
@@ -487,30 +528,22 @@ function App() {
                                 <th style={{ fontWeight: 'bold' }}>Value</th>
                             </tr>
                             <tr>
-                                <th style={{ padding: '0.5rem' }}><input type="text" placeholder="Filter..." value={journalFilters.date} onChange={e => setJournalFilters({ ...journalFilters, date: e.target.value })} style={{ width: '100%', padding: '0.25rem', fontSize: '0.8rem', background: 'rgba(255,255,255,0.05)', border: '1px solid #4a5568', color: 'var(--text-primary)' }} /></th>
-                                <th style={{ padding: '0.5rem' }}><input type="text" placeholder="Filter..." value={journalFilters.scrip} onChange={e => setJournalFilters({ ...journalFilters, scrip: e.target.value })} style={{ width: '100%', padding: '0.25rem', fontSize: '0.8rem', background: 'rgba(255,255,255,0.05)', border: '1px solid #4a5568', color: 'var(--text-primary)' }} /></th>
+                                <th style={{ padding: '0.5rem' }}><input type="text" className="filter-input" placeholder="Filter Date..." value={journalFilters.date} onChange={e => setJournalFilters({ ...journalFilters, date: e.target.value })} /></th>
+                                <th style={{ padding: '0.5rem' }}><input type="text" className="filter-input" placeholder="Filter Scrip..." value={journalFilters.scrip} onChange={e => setJournalFilters({ ...journalFilters, scrip: e.target.value })} /></th>
                                 <th style={{ padding: '0.5rem' }}>
                                     <select
                                         value={journalFilters.account}
                                         onChange={e => setJournalFilters({ ...journalFilters, account: e.target.value })}
-                                        style={{
-                                            width: '100%',
-                                            padding: '0.25rem',
-                                            fontSize: '0.8rem',
-                                            background: '#1a202c',
-                                            border: '1px solid #4a5568',
-                                            color: '#e2e8f0',
-                                            borderRadius: '0.25rem'
-                                        }}
+                                        className="filter-input"
                                     >
-                                        <option value="" style={{ background: '#1a202c', color: '#e2e8f0' }}>All</option>
-                                        {uniqueAccounts.map(a => <option key={a} value={a} style={{ background: '#1a202c', color: '#e2e8f0' }}>{a}</option>)}
+                                        <option value="">All Accounts</option>
+                                        {uniqueAccounts.map(a => <option key={a} value={a}>{a}</option>)}
                                     </select>
                                 </th>
-                                <th style={{ padding: '0.5rem' }}><input type="text" placeholder="Filter..." value={journalFilters.type} onChange={e => setJournalFilters({ ...journalFilters, type: e.target.value })} style={{ width: '100%', padding: '0.25rem', fontSize: '0.8rem', background: 'rgba(255,255,255,0.05)', border: '1px solid #4a5568', color: 'var(--text-primary)' }} /></th>
-                                <th style={{ padding: '0.5rem' }}><input type="text" placeholder="Filter..." value={journalFilters.qty} onChange={e => setJournalFilters({ ...journalFilters, qty: e.target.value })} style={{ width: '100%', padding: '0.25rem', fontSize: '0.8rem', background: 'rgba(255,255,255,0.05)', border: '1px solid #4a5568', color: 'var(--text-primary)' }} /></th>
-                                <th style={{ padding: '0.5rem' }}><input type="text" placeholder="Filter..." value={journalFilters.price} onChange={e => setJournalFilters({ ...journalFilters, price: e.target.value })} style={{ width: '100%', padding: '0.25rem', fontSize: '0.8rem', background: 'rgba(255,255,255,0.05)', border: '1px solid #4a5568', color: 'var(--text-primary)' }} /></th>
-                                <th style={{ padding: '0.5rem' }}><input type="text" placeholder="Filter..." value={journalFilters.value} onChange={e => setJournalFilters({ ...journalFilters, value: e.target.value })} style={{ width: '100%', padding: '0.25rem', fontSize: '0.8rem', background: 'rgba(255,255,255,0.05)', border: '1px solid #4a5568', color: 'var(--text-primary)' }} /></th>
+                                <th style={{ padding: '0.5rem' }}><input type="text" className="filter-input" placeholder="Filter Type..." value={journalFilters.type} onChange={e => setJournalFilters({ ...journalFilters, type: e.target.value })} /></th>
+                                <th style={{ padding: '0.5rem' }}><input type="text" className="filter-input" placeholder="Qty..." value={journalFilters.qty} onChange={e => setJournalFilters({ ...journalFilters, qty: e.target.value })} /></th>
+                                <th style={{ padding: '0.5rem' }}><input type="text" className="filter-input" placeholder="Price..." value={journalFilters.price} onChange={e => setJournalFilters({ ...journalFilters, price: e.target.value })} /></th>
+                                <th style={{ padding: '0.5rem' }}><input type="text" className="filter-input" placeholder="Value..." value={journalFilters.value} onChange={e => setJournalFilters({ ...journalFilters, value: e.target.value })} /></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -688,6 +721,10 @@ function App() {
         </section>
     );
 
+    if (!user) {
+        return <Login onLoginSuccess={handleLoginSuccess} />;
+    }
+
     return (
         <>
             <aside className="sidebar">
@@ -734,6 +771,9 @@ function App() {
                     <div className={`nav-item ${activeTab === 'balance-sheet' ? 'active' : ''}`} onClick={() => setActiveTab('balance-sheet')}>
                         <PieChart size={20} /> Balance Sheet
                     </div>
+                    <div className={`nav-item ${activeTab === 'annual-cashflow' ? 'active' : ''}`} onClick={() => setActiveTab('annual-cashflow')}>
+                        <TrendingUp size={20} /> Cash Flow Statement
+                    </div>
                     <div className={`nav-item ${activeTab === 'settings' ? 'active' : ''}`} onClick={() => setActiveTab('settings')}>
                         <SettingsIcon size={20} /> Settings
                     </div>
@@ -765,7 +805,8 @@ function App() {
                 {activeTab === 'journals' && <AccountingJournals />}
                 {activeTab === 'profit-loss' && <ProfitLoss />}
                 {activeTab === 'balance-sheet' && <BalanceSheet />}
-                {activeTab === 'settings' && <Settings />}
+                {activeTab === 'annual-cashflow' && <AnnualCashflow />}
+                {activeTab === 'settings' && <Settings theme={theme} onThemeChange={toggleTheme} user={user} />}
             </main>
 
             {isModalOpen && (
@@ -782,10 +823,22 @@ function App() {
                             </div>
                             <div className="form-group">
                                 <label>Instrument</label>
-                                <select value={formData.instrumentId} onChange={e => setFormData({ ...formData, instrumentId: e.target.value })} required>
-                                    <option value="">Select Instrument</option>
-                                    {instruments.map(ins => <option key={ins.id} value={ins.id}>{ins.ticker} - {ins.name}</option>)}
-                                </select>
+                                <InstrumentSearch
+                                    instruments={instruments}
+                                    selectedInstrumentId={formData.instrumentId}
+                                    types={['stock', 'etf', 'mf', 'index']} // Limit to investment instruments
+                                    onSelect={(inst) => {
+                                        if (inst) {
+                                            setFormData({ ...formData, instrumentId: inst.id });
+                                            // Optimistically add to instruments list if not present
+                                            if (!instruments.find(i => i.id === inst.id)) {
+                                                setInstruments(prev => [...prev, inst]);
+                                            }
+                                        } else {
+                                            setFormData({ ...formData, instrumentId: '' });
+                                        }
+                                    }}
+                                />
                             </div>
                             <div className="form-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                                 <div className="form-group">

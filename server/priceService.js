@@ -36,6 +36,30 @@ class PriceService {
             return [];
         }
     }
+
+    /**
+     * Search for scrips using Yahoo Finance API.
+     * @param {string} query 
+     * @returns {Promise<Array<{ticker: string, name: string, exchange: string}>>}
+     */
+    async search(query) {
+        try {
+            const results = await yahooFinance.search(query);
+            // Filter for Indian exchanges if needed, but for now just return relevant fields
+            // Yahoo Finance returns exchange as 'NSI' for NSE usually, or suffix .NS
+            return results.quotes
+                .filter(q => q.isYahooFinance && (q.symbol.endsWith('.NS') || q.symbol.endsWith('.BO')))
+                .map(q => ({
+                    ticker: q.symbol,
+                    name: q.shortname || q.longname || q.symbol,
+                    exchange: q.exchange,
+                    type: q.quoteType
+                }));
+        } catch (error) {
+            console.error(`Error searching for ${query}:`, error.message);
+            return [];
+        }
+    }
 }
 
 module.exports = new PriceService();

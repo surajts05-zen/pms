@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Trash2, Edit2, Calendar, DollarSign, Tag, Info } from 'lucide-react';
+import { Plus, Trash2, Edit2, Calendar, DollarSign, Tag, Info, CheckCircle } from 'lucide-react';
 import { formatIndianRupee, formatIndianRupeeInt } from '../utils/formatCurrency';
 import api from '../services/api';
 

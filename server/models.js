@@ -153,6 +153,10 @@ const CashflowCategory = sequelize.define('CashflowCategory', {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
     },
+    isInvestment: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+    },
     displayOrder: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
@@ -425,7 +429,45 @@ const User = sequelize.define('User', {
     isTwoFactorEnabled: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
+    },
+    theme: {
+        type: DataTypes.STRING,
+        defaultValue: 'dark', // 'dark' or 'light'
     }
+});
+
+const GovtSchemeTransaction = sequelize.define('GovtSchemeTransaction', {
+    id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true
+    },
+    transactionDate: {
+        type: DataTypes.DATEONLY,
+        allowNull: false
+    },
+    description: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    notes: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    amount: {
+        type: DataTypes.DECIMAL(15, 2),
+        allowNull: false
+    },
+    type: {
+        type: DataTypes.ENUM('deposit', 'withdrawal', 'interest'),
+        allowNull: false
+    },
+    UserId: {
+        type: DataTypes.UUID,
+        allowNull: false
+    }
+}, {
+    timestamps: true
 });
 
 // Relationships
@@ -455,6 +497,10 @@ LedgerPosting.belongsTo(JournalEntry, { foreignKey: 'journalEntryId' });
 LedgerAccount.hasMany(LedgerPosting, { foreignKey: 'ledgerAccountId' });
 LedgerPosting.belongsTo(LedgerAccount, { foreignKey: 'ledgerAccountId' });
 
+// Govt Scheme Relationships
+Account.hasMany(GovtSchemeTransaction);
+GovtSchemeTransaction.belongsTo(Account);
+
 User.hasMany(Account);
 User.hasMany(Instrument);
 User.hasMany(Transaction);
@@ -465,6 +511,7 @@ User.hasMany(LedgerAccount);
 User.hasMany(JournalEntry);
 User.hasMany(LedgerPosting);
 User.hasMany(InstrumentInterestRate);
+User.hasMany(GovtSchemeTransaction);
 
 Account.belongsTo(User);
 Instrument.belongsTo(User);
@@ -476,6 +523,7 @@ LedgerAccount.belongsTo(User);
 JournalEntry.belongsTo(User);
 LedgerPosting.belongsTo(User);
 InstrumentInterestRate.belongsTo(User);
+GovtSchemeTransaction.belongsTo(User);
 
 module.exports = {
     User,
@@ -490,5 +538,29 @@ module.exports = {
     JournalEntry,
     LedgerPosting,
     InstrumentInterestRate,
+    GovtSchemeTransaction,
     sequelize
 };
+
+// Hooks for Govt Scheme Synchronization
+const GovtSchemeService = require('./govtSchemeService');
+
+CashflowTransaction.beforeCreate(async (transaction, options) => {
+    await GovtSchemeService.detectSchemeTransfer(transaction, { Account });
+});
+
+CashflowTransaction.beforeUpdate(async (transaction, options) => {
+    await GovtSchemeService.detectSchemeTransfer(transaction, { Account });
+});
+
+CashflowTransaction.afterCreate(async (transaction, options) => {
+    await GovtSchemeService.syncTransaction(transaction, { Account, GovtSchemeTransaction });
+});
+
+CashflowTransaction.afterUpdate(async (transaction, options) => {
+    await GovtSchemeService.syncTransaction(transaction, { Account, GovtSchemeTransaction });
+});
+
+CashflowTransaction.afterDestroy(async (transaction, options) => {
+    await GovtSchemeService.handleDeletion(transaction, { Account, GovtSchemeTransaction });
+});

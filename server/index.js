@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const { sequelize, Account, Instrument, Transaction, CashflowTransaction, LedgerAccount, LedgerPosting } = require('./models');
+const { Op } = require('sequelize');
 const priceService = require('./priceService');
 const portfolioRouter = require('./routes/portfolio');
 const { authenticateToken } = require('./routes/auth');
@@ -141,6 +142,76 @@ app.get('/api/instruments', authenticateToken, async (req, res) => {
     res.json(instruments);
 });
 
+app.get('/api/instruments/search', authenticateToken, async (req, res) => {
+    try {
+        const { q, types } = req.query;
+        // console.log('Search Params:', { q, types });
+
+        if (!q || q.length < 2) {
+            return res.json([]);
+        }
+
+        const typeList = types ? types.split(',') : [];
+        const validDbTypes = ['stock', 'etf', 'fd', 'cash', 'mf']; // Valid ENUM values in DB
+
+        // If specific types requested, filter for DB query
+        let runDbSearch = true;
+
+        const whereClause = {
+            [Op.or]: [
+                { ticker: { [Op.iLike]: `%${q}%` } },
+                { name: { [Op.iLike]: `%${q}%` } }
+            ]
+        };
+
+        if (typeList.length > 0) {
+            const dbQueryTypes = typeList.filter(t => validDbTypes.includes(t));
+            if (dbQueryTypes.length > 0) {
+                whereClause.type = { [Op.in]: dbQueryTypes };
+            } else {
+                // User requested types that don't exist in DB (e.g. only 'index')
+                // So DB search should yield 0 results.
+                runDbSearch = false;
+            }
+        }
+
+        // console.log('Where Clause:', JSON.stringify(whereClause, null, 2));
+
+        // 1. Search Local DB
+        let dbResults = [];
+        if (runDbSearch) {
+            dbResults = await Instrument.findAll({
+                where: whereClause,
+                limit: 5
+            });
+        }
+
+        let results = dbResults.map(i => ({ ...i.toJSON(), source: 'local' }));
+
+        // 2. If fewer than 5, search external API (only if type 'stock', 'etf', 'index' is allowed or not filtered)
+        // Assume external API returns stocks/ETFs mainly.
+        const allowExternal = typeList.length === 0 || typeList.some(t => ['stock', 'etf', 'index', 'mf'].includes(t));
+
+        if (results.length < 5 && allowExternal) {
+            try {
+                const apiResults = await priceService.search(q);
+                // Filter out existing ones
+                const existingTickers = new Set(results.map(r => r.ticker));
+                const newResults = apiResults.filter(r => !existingTickers.has(r.ticker));
+
+                results = [...results, ...newResults.map(r => ({ ...r, source: 'remote' }))];
+            } catch (apiErr) {
+                console.error("API Search failed:", apiErr.message);
+            }
+        }
+
+        res.json(results.slice(0, 10)); // Limit total to 10
+    } catch (err) {
+        console.error("Search Route Error:", err);
+        res.status(400).json({ error: err.message });
+    }
+});
+
 app.post('/api/instruments', authenticateToken, async (req, res) => {
     try {
         const instrument = await Instrument.create({ ...req.body, UserId: req.user.id });
@@ -180,6 +251,38 @@ app.post('/api/transactions', authenticateToken, async (req, res) => {
 
         const transaction = await Transaction.create({ ...req.body, UserId: req.user.id });
         res.status(201).json(transaction);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+
+app.put('/api/transactions/:id', authenticateToken, async (req, res) => {
+    try {
+        await Transaction.update(req.body, {
+            where: { id: req.params.id, UserId: req.user.id }
+        });
+
+        // Also update CashflowTransaction if linked
+        // This is a simplified approach; ideally we should sync them properly
+        // For now, assuming direct editing of transaction implies we might need to adjust linked cashflow manually or via separate logic
+
+        res.json({ success: true });
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+
+app.delete('/api/transactions/:id', authenticateToken, async (req, res) => {
+    try {
+        await Transaction.destroy({
+            where: { id: req.params.id, UserId: req.user.id }
+        });
+
+        await CashflowTransaction.destroy({
+            where: { linkedTransactionId: req.params.id, UserId: req.user.id }
+        });
+
+        res.json({ success: true });
     } catch (err) {
         res.status(400).json({ error: err.message });
     }

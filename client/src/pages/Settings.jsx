@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Save, RefreshCw } from 'lucide-react';
+import { Save, RefreshCw, Moon, Sun } from 'lucide-react';
 import axios from 'axios';
 import TwoFactorSetup from '../components/TwoFactorSetup';
 import api from '../services/api';
 
-function Settings() {
+function Settings({ theme, onThemeChange, user }) {
     const [accounts, setAccounts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [saving, setSaving] = useState(false);
@@ -68,6 +68,56 @@ function Settings() {
                     <button className="btn" onClick={handleSave} disabled={saving || loading}>
                         <Save size={18} style={{ marginRight: '8px' }} /> {saving ? 'Saving...' : 'Save All'}
                     </button>
+                </div>
+            </div>
+
+            <div className="card" style={{ marginBottom: '2rem' }}>
+                <h3 style={{ marginBottom: '1.5rem' }}>Appearance</h3>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div>
+                        <div style={{ fontWeight: '600', marginBottom: '0.25rem' }}>Theme Preference</div>
+                        <div style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>Switch between dark and light mode</div>
+                    </div>
+                    <div style={{ display: 'flex', gap: '0.5rem', background: 'var(--bg-color)', padding: '0.25rem', borderRadius: '0.5rem', border: '1px solid var(--border)' }}>
+                        <button
+                            onClick={() => onThemeChange('light')}
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.5rem',
+                                padding: '0.5rem 1rem',
+                                borderRadius: '0.375rem',
+                                border: 'none',
+                                background: theme === 'light' ? 'var(--card-bg)' : 'transparent',
+                                color: theme === 'light' ? 'var(--primary)' : 'var(--text-muted)',
+                                boxShadow: theme === 'light' ? '0 1px 2px rgba(0,0,0,0.1)' : 'none',
+                                cursor: 'pointer',
+                                transition: 'all 0.2s',
+                                fontWeight: theme === 'light' ? '600' : '400'
+                            }}
+                        >
+                            <Sun size={18} /> Light
+                        </button>
+                        <button
+                            onClick={() => onThemeChange('dark')}
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.5rem',
+                                padding: '0.5rem 1rem',
+                                borderRadius: '0.375rem',
+                                border: 'none',
+                                background: theme === 'dark' ? 'var(--card-bg)' : 'transparent',
+                                color: theme === 'dark' ? 'var(--primary)' : 'var(--text-muted)',
+                                boxShadow: theme === 'dark' ? '0 1px 2px rgba(0,0,0,0.1)' : 'none',
+                                cursor: 'pointer',
+                                transition: 'all 0.2s',
+                                fontWeight: theme === 'dark' ? '600' : '400'
+                            }}
+                        >
+                            <Moon size={18} /> Dark
+                        </button>
+                    </div>
                 </div>
             </div>
 

@@ -37,7 +37,7 @@ router.post('/signup', async (req, res) => {
         const user = await User.create({ email, password: hashedPassword });
 
         const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '1d' });
-        res.status(201).json({ token, user: { id: user.id, email: user.email, isTwoFactorEnabled: false } });
+        res.status(201).json({ token, user: { id: user.id, email: user.email, isTwoFactorEnabled: false, theme: user.theme } });
     } catch (err) {
         res.status(400).json({ error: err.message });
     }
@@ -59,7 +59,7 @@ router.post('/login', async (req, res) => {
         }
 
         const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '1d' });
-        res.json({ token, user: { id: user.id, email: user.email, isTwoFactorEnabled: false } });
+        res.json({ token, user: { id: user.id, email: user.email, isTwoFactorEnabled: false, theme: user.theme } });
     } catch (err) {
         res.status(400).json({ error: err.message });
     }
@@ -90,7 +90,7 @@ router.post('/google', async (req, res) => {
         }
 
         const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '1d' });
-        res.json({ token, user: { id: user.id, email: user.email, isTwoFactorEnabled: user.isTwoFactorEnabled } });
+        res.json({ token, user: { id: user.id, email: user.email, isTwoFactorEnabled: user.isTwoFactorEnabled, theme: user.theme } });
     } catch (err) {
         console.error('Google Auth Error:', err);
         res.status(400).json({ error: 'Google authentication failed.' });
@@ -160,6 +160,36 @@ router.post('/2fa/login-verify', async (req, res) => {
         }
     } catch (err) {
         res.status(500).json({ error: err.message });
+    }
+});
+
+// 2FA Disable
+router.post('/2fa/disable', authenticateToken, async (req, res) => {
+    try {
+        const user = await User.findByPk(req.user.id);
+        user.isTwoFactorEnabled = false;
+        user.twoFactorSecret = null;
+        await user.save();
+        res.json({ success: true, message: '2FA disabled successfully.' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Update Profile
+router.put('/profile', authenticateToken, async (req, res) => {
+    try {
+        const { theme } = req.body;
+        const user = await User.findByPk(req.user.id);
+
+        if (theme) {
+            user.theme = theme;
+        }
+
+        await user.save();
+        res.json({ success: true, user: { id: user.id, email: user.email, isTwoFactorEnabled: user.isTwoFactorEnabled, theme: user.theme } });
+    } catch (err) {
+        res.status(400).json({ error: err.message });
     }
 });
 

@@ -11,9 +11,9 @@ function Cashflow() {
     const [summary, setSummary] = useState(null);
     const [selectedAccount, setSelectedAccount] = useState('all');
     const [selectedAccountType, setSelectedAccountType] = useState('all');
-    const [period, setPeriod] = useState('monthly'); // monthly, fy, custom
+    const [period, setPeriod] = useState('fy'); // monthly, fy, custom - default to FY
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
-    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+    const [selectedYear, setSelectedYear] = useState(2025); // Default to FY 2025-26
     const [customRange, setCustomRange] = useState({
         startDate: new Date().toISOString().split('T')[0],
         endDate: new Date().toISOString().split('T')[0]
@@ -452,54 +452,49 @@ function Cashflow() {
                                     <th style={{ textAlign: 'right' }}>Balance</th>
                                 </tr>
                                 <tr>
-                                    <th style={{ padding: '0.25rem' }}>
+                                    <th style={{ padding: '0.5rem' }}>
                                         <input
                                             type="text"
                                             className="filter-input"
-                                            placeholder="Filter..."
+                                            placeholder="Date..."
                                             value={columnFilters.transactionDate}
                                             onChange={e => setColumnFilters({ ...columnFilters, transactionDate: e.target.value })}
-                                            style={{ width: '100%', padding: '0.25rem', fontSize: '0.75rem', background: 'var(--bg-color)', border: '1px solid var(--border)', color: 'var(--text-main)' }}
                                         />
                                     </th>
-                                    <th style={{ padding: '0.25rem' }}>
+                                    <th style={{ padding: '0.5rem' }}>
                                         <input
                                             type="text"
                                             className="filter-input"
-                                            placeholder="Filter..."
+                                            placeholder="Account..."
                                             value={columnFilters['Account.name']}
                                             onChange={e => setColumnFilters({ ...columnFilters, 'Account.name': e.target.value })}
-                                            style={{ width: '100%', padding: '0.25rem', fontSize: '0.75rem', background: 'var(--bg-color)', border: '1px solid var(--border)', color: 'var(--text-main)' }}
                                         />
                                     </th>
-                                    <th style={{ padding: '0.25rem' }}>
+                                    <th style={{ padding: '0.5rem' }}>
                                         <input
                                             type="text"
                                             className="filter-input"
-                                            placeholder="Filter..."
+                                            placeholder="Category..."
                                             value={columnFilters['CashflowCategory.name']}
                                             onChange={e => setColumnFilters({ ...columnFilters, 'CashflowCategory.name': e.target.value })}
-                                            style={{ width: '100%', padding: '0.25rem', fontSize: '0.75rem', background: 'var(--bg-color)', border: '1px solid var(--border)', color: 'var(--text-main)' }}
                                         />
                                     </th>
-                                    <th style={{ padding: '0.25rem' }}>
+                                    <th style={{ padding: '0.5rem' }}>
                                         <input
                                             type="text"
                                             className="filter-input"
-                                            placeholder="Filter..."
+                                            placeholder="Description..."
                                             value={columnFilters.description}
                                             onChange={e => setColumnFilters({ ...columnFilters, description: e.target.value })}
-                                            style={{ width: '100%', padding: '0.25rem', fontSize: '0.75rem', background: 'var(--bg-color)', border: '1px solid var(--border)', color: 'var(--text-main)' }}
                                         />
                                     </th>
-                                    <th style={{ padding: '0.25rem' }}>
+                                    <th style={{ padding: '0.5rem' }}>
                                         <input
                                             type="text"
                                             className="filter-input"
-                                            placeholder="Filter..."
+                                            placeholder="Type..."
                                             value={columnFilters.type}
                                             onChange={e => setColumnFilters({ ...columnFilters, type: e.target.value })}
-                                            style={{ width: '100%', padding: '0.25rem', fontSize: '0.75rem', background: 'var(--bg-color)', border: '1px solid var(--border)', color: 'var(--text-main)' }}
                                         />
                                     </th>
                                     <th style={{ padding: '0.25rem' }}></th>

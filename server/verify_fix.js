@@ -1,35 +1,49 @@
+const { LedgerAccount, sequelize } = require('./models');
+const { Op } = require('sequelize');
 
-const fs = require('fs');
-
-async function run() {
+async function verify() {
     try {
-        await new Promise(r => setTimeout(r, 1000)); // Short wait
+        await sequelize.authenticate();
 
-        const accountsRes = await fetch('http://localhost:5000/api/accounts');
-        const accounts = await accountsRes.json();
+        // Check for Categories converted to Assets
+        const assetAccounts = await LedgerAccount.findAll({
+            where: {
+                type: 'Asset',
+                linkedType: 'CashflowCategory'
+            }
+        });
 
-        const targets = ['KOTAKBANK', 'BAJFINANCE', 'HDFCBANK', 'COFORGE', 'PARAS', 'ASIANPAINT', 'LUPIN'];
+        console.log('--- Converted Asset Categories ---');
+        assetAccounts.forEach(a => console.log(`[OK] ${a.name} is now an Asset`));
 
-        let output = '--- VERIFICATION RESULTS ---\n';
-
-        for (const acc of accounts) {
-            const pRes = await fetch(`http://localhost:5000/api/portfolio?accountId=${acc.id}`);
-            const pData = await pRes.json();
-
-            output += `\nAccount: ${acc.name}\n`;
-            pData.holdings.forEach(h => {
-                if (targets.some(t => h.ticker.includes(t))) {
-                    output += `  ${h.ticker}: ${h.quantity.toFixed(4)}\n`;
-                }
-            });
+        if (assetAccounts.length === 0) {
+            console.error('FAILED: No categories found under Assets!');
         }
 
-        fs.writeFileSync('verify_output.txt', output);
-        console.log('Done.');
+        // Check if any remain as Expense (should handle this if migration missed any?)
+        // searching for common investment keywords
+        const keywords = ['Start', 'Invest', 'Stock', 'Mutual', 'SIP', 'PPF', 'SSY', 'FD', 'Gold'];
+        const expenseAccounts = await LedgerAccount.findAll({
+            where: {
+                type: 'Expense',
+                linkedType: 'CashflowCategory',
+                [Op.or]: keywords.map(k => ({ name: { [Op.like]: `%${k}%` } }))
+            }
+        });
 
-    } catch (e) {
-        console.error(e);
+        if (expenseAccounts.length > 0) {
+            console.log('\n--- Warnings: Potential Investments still as Expense ---');
+            expenseAccounts.forEach(a => console.log(`[WARN] ${a.name} is still Type: ${a.type}`));
+        } else {
+            console.log('\n[OK] No obvious investment categories found in Expenses.');
+        }
+
+        process.exit(0);
+
+    } catch (err) {
+        console.error(err);
+        process.exit(1);
     }
 }
 
-run();
+verify();

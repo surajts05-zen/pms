@@ -6,14 +6,41 @@ import api from '../services/api';
 const ProfitLoss = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [startDate, setStartDate] = useState('2025-04-01');
+    const [endDate, setEndDate] = useState('2026-03-31');
+
+    const [viewType, setViewType] = useState('yearly'); // 'monthly', 'yearly', 'custom'
+    const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth()); // 0-11
+    const [selectedYear, setSelectedYear] = useState(2025); // Default to FY 2025-26
+
+    // Helper to get date range from selection
+    useEffect(() => {
+        let start, end;
+        if (viewType === 'monthly') {
+            const firstDay = new Date(selectedYear, selectedMonth, 1);
+            const lastDay = new Date(selectedYear, selectedMonth + 1, 0);
+            start = firstDay.toLocaleDateString('en-CA'); // YYYY-MM-DD
+            end = lastDay.toLocaleDateString('en-CA');
+        } else if (viewType === 'yearly') {
+            // Financial Year: Apr 1 (Year) to Mar 31 (Year+1)
+            start = `${selectedYear}-04-01`;
+            end = `${selectedYear + 1}-03-31`;
+        }
+
+        if (viewType !== 'custom') {
+            setStartDate(start);
+            setEndDate(end);
+        }
+    }, [viewType, selectedMonth, selectedYear]);
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [startDate, endDate]);
 
     const fetchData = async () => {
+        setLoading(true);
         try {
-            const res = await api.get('/financial-statements/profit-loss');
+            const res = await api.get(`/financial-statements/profit-loss?startDate=${startDate}&endDate=${endDate}`);
             setData(res.data);
         } catch (err) {
             console.error('Error fetching profit & loss:', err);
@@ -22,7 +49,7 @@ const ProfitLoss = () => {
         }
     };
 
-    if (loading) {
+    if (loading && data.length === 0) {
         return (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '300px' }}>
                 <Loader2 className="animate-spin" size={48} color="var(--primary)" />
@@ -59,6 +86,121 @@ const ProfitLoss = () => {
 
     return (
         <div className="profit-loss">
+            <div className="header" style={{ marginBottom: '2rem' }}>
+                <div style={{ marginBottom: '1.5rem' }}>
+                    <h2>Profit & Loss</h2>
+                    <p style={{ color: 'var(--text-muted)' }}>Income vs Expenses Statement</p>
+                </div>
+
+                <div
+                    className="filter-bar"
+                    style={{
+                        background: 'var(--card-bg)',
+                        padding: '1.5rem',
+                        borderRadius: '8px',
+                        border: '1px solid var(--border)',
+                        display: 'flex',
+                        gap: '2rem',
+                        alignItems: 'flex-end'
+                    }}
+                >
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                        <label style={{ fontSize: '0.75rem', fontWeight: 'bold', color: 'var(--text-muted)', letterSpacing: '0.05em' }}>PERIOD TYPE</label>
+                        <select
+                            value={viewType}
+                            onChange={(e) => setViewType(e.target.value)}
+                            className="filter-input"
+                            style={{ width: '160px', height: '40px' }}
+                        >
+                            <option value="monthly">Monthly View</option>
+                            <option value="yearly">Financial Year</option>
+                            <option value="custom">Custom Range</option>
+                        </select>
+                    </div>
+
+                    {viewType === 'monthly' && (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                            <label style={{ fontSize: '0.75rem', fontWeight: 'bold', color: 'var(--text-muted)', letterSpacing: '0.05em' }}>MONTH</label>
+                            <select
+                                value={selectedMonth}
+                                onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
+                                className="filter-input"
+                                style={{ width: '140px', height: '40px' }}
+                            >
+                                <option value={0}>January</option>
+                                <option value={1}>February</option>
+                                <option value={2}>March</option>
+                                <option value={3}>April</option>
+                                <option value={4}>May</option>
+                                <option value={5}>June</option>
+                                <option value={6}>July</option>
+                                <option value={7}>August</option>
+                                <option value={8}>September</option>
+                                <option value={9}>October</option>
+                                <option value={10}>November</option>
+                                <option value={11}>December</option>
+                            </select>
+                        </div>
+                    )}
+
+                    {viewType === 'monthly' && (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                            <label style={{ fontSize: '0.75rem', fontWeight: 'bold', color: 'var(--text-muted)', letterSpacing: '0.05em' }}>YEAR</label>
+                            <select
+                                value={selectedYear}
+                                onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+                                className="filter-input"
+                                style={{ width: '100px', height: '40px' }}
+                            >
+                                {[2024, 2025, 2026, 2027].map(y => (
+                                    <option key={y} value={y}>{y}</option>
+                                ))}
+                            </select>
+                        </div>
+                    )}
+
+                    {viewType === 'yearly' && (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                            <label style={{ fontSize: '0.75rem', fontWeight: 'bold', color: 'var(--text-muted)', letterSpacing: '0.05em' }}>FY STARTING</label>
+                            <select
+                                value={selectedYear}
+                                onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+                                className="filter-input"
+                                style={{ width: '140px', height: '40px' }}
+                            >
+                                {[2024, 2025, 2026, 2027].map(y => (
+                                    <option key={y} value={y}>FY {y}-{y + 1}</option>
+                                ))}
+                            </select>
+                        </div>
+                    )}
+
+                    {viewType === 'custom' && (
+                        <>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                <label style={{ fontSize: '0.75rem', fontWeight: 'bold', color: 'var(--text-muted)', letterSpacing: '0.05em' }}>FROM</label>
+                                <input
+                                    type="date"
+                                    value={startDate}
+                                    onChange={(e) => setStartDate(e.target.value)}
+                                    className="filter-input"
+                                    style={{ width: '150px', height: '40px' }}
+                                />
+                            </div>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                <label style={{ fontSize: '0.75rem', fontWeight: 'bold', color: 'var(--text-muted)', letterSpacing: '0.05em' }}>TO</label>
+                                <input
+                                    type="date"
+                                    value={endDate}
+                                    onChange={(e) => setEndDate(e.target.value)}
+                                    className="filter-input"
+                                    style={{ width: '150px', height: '40px' }}
+                                />
+                            </div>
+                        </>
+                    )}
+                </div>
+            </div>
             <div className="table-container shadow-xl">
                 <div style={{ overflowX: 'auto' }}>
                     <table style={{ minWidth: '100%', borderCollapse: 'separate', borderSpacing: 0 }}>

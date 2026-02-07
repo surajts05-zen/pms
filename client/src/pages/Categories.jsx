@@ -10,7 +10,8 @@ function Categories() {
         name: '',
         type: 'expense',
         parentCategory: '',
-        displayOrder: 0
+        displayOrder: 0,
+        isInvestment: false
     });
 
     useEffect(() => {
@@ -35,7 +36,7 @@ function Categories() {
             } else {
                 await api.post('/categories', formData);
             }
-            setFormData({ name: '', type: 'expense', parentCategory: '', displayOrder: 0 });
+            setFormData({ name: '', type: 'expense', parentCategory: '', displayOrder: 0, isInvestment: false });
             setEditingId(null);
             fetchCategories();
         } catch (err) {
@@ -51,7 +52,8 @@ function Categories() {
             name: category.name,
             type: category.type,
             parentCategory: category.parentCategory || '',
-            displayOrder: category.displayOrder
+            displayOrder: category.displayOrder,
+            isInvestment: category.isInvestment || false
         });
     };
 
@@ -97,7 +99,22 @@ function Categories() {
                         ) : (
                             cats.map(cat => (
                                 <tr key={cat.id}>
-                                    <td style={{ fontWeight: '600' }}>{cat.name}</td>
+                                    <td style={{ fontWeight: '600' }}>
+                                        {cat.name}
+                                        {cat.isInvestment && (
+                                            <span style={{
+                                                marginLeft: '8px',
+                                                fontSize: '0.75rem',
+                                                background: 'rgba(16, 185, 129, 0.2)',
+                                                color: '#10B981',
+                                                padding: '2px 6px',
+                                                borderRadius: '4px',
+                                                border: '1px solid rgba(16, 185, 129, 0.3)'
+                                            }}>
+                                                ASSET
+                                            </span>
+                                        )}
+                                    </td>
                                     <td style={{ color: 'var(--text-muted)' }}>
                                         {cat.parentCategory || '-'}
                                     </td>
@@ -178,6 +195,17 @@ function Categories() {
                             onChange={e => setFormData({ ...formData, displayOrder: parseInt(e.target.value) })}
                             style={{ width: '70px' }}
                         />
+                    </div>
+                    <div className="form-group" style={{ marginBottom: 0, paddingBottom: '5px', alignSelf: 'center' }}>
+                        <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', marginBottom: 0 }}>
+                            <input
+                                type="checkbox"
+                                checked={formData.isInvestment}
+                                onChange={e => setFormData({ ...formData, isInvestment: e.target.checked })}
+                                style={{ width: 'auto' }}
+                            />
+                            Investment
+                        </label>
                     </div>
                     <button type="submit" className="btn" disabled={loading} style={{ whiteSpace: 'nowrap' }}>
                         {loading ? 'Saving...' : (editingId ? <><Save size={16} style={{ marginRight: '4px' }} /> Update</> : <><Plus size={16} style={{ marginRight: '4px' }} /> Add</>)}

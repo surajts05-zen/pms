@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { TrendingUp, DollarSign, PieChart as PieChartIcon, Calendar } from 'lucide-react';
+import { TrendingUp, IndianRupee, PieChart as PieChartIcon, Calendar } from 'lucide-react';
 import axios from 'axios';
 import { formatIndianRupee } from '../utils/formatCurrency';
+import api from '../services/api';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -35,11 +36,12 @@ const Dividends = () => {
     const [byScrip, setByScrip] = useState([]);
     const [byQuarter, setByQuarter] = useState([]);
     const [trends, setTrends] = useState([]);
+    const [filterText, setFilterText] = useState('');
 
     // Period selection state
-    const [period, setPeriod] = useState('monthly'); // monthly, fy, custom
+    const [period, setPeriod] = useState('fy'); // monthly, fy, custom - default to FY
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
-    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+    const [selectedYear, setSelectedYear] = useState(2025); // Default to FY 2025-26
     const [customRange, setCustomRange] = useState({
         startDate: new Date().toISOString().split('T')[0],
         endDate: new Date().toISOString().split('T')[0]
@@ -318,7 +320,7 @@ const Dividends = () => {
                     {period === 'fy' && (
                         <div className="form-group" style={{ marginBottom: 0, minWidth: '160px' }}>
                             <label style={{ fontSize: '0.75rem', fontWeight: '600', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                                Financial Year
+                                FY STARTING
                             </label>
                             <select
                                 value={selectedYear}
@@ -393,7 +395,7 @@ const Dividends = () => {
                                     {summary.transactionCount} payments
                                 </div>
                             </div>
-                            <DollarSign size={32} style={{ color: 'var(--accent)', opacity: 0.3 }} />
+                            <IndianRupee size={32} style={{ color: 'var(--accent)', opacity: 0.3 }} />
                         </div>
                     </div>
 
@@ -623,7 +625,23 @@ const Dividends = () => {
                     {/* Detailed Transactions */}
                     {summary?.transactions && summary.transactions.length > 0 && (
                         <div className="card">
-                            <h3 style={{ marginBottom: '1rem', padding: '1.5rem 1.5rem 0' }}>All Dividend Transactions</h3>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem 1.5rem 0', marginBottom: '1rem' }}>
+                                <h3 style={{ margin: 0 }}>All Dividend Transactions</h3>
+                                <input
+                                    type="text"
+                                    placeholder="Filter by Scrip, Account, Description..."
+                                    value={filterText}
+                                    onChange={e => setFilterText(e.target.value)}
+                                    style={{
+                                        padding: '0.5rem 1rem',
+                                        borderRadius: '0.5rem',
+                                        border: '1px solid rgba(255,255,255,0.1)',
+                                        background: 'rgba(255,255,255,0.05)',
+                                        color: '#fff',
+                                        minWidth: '300px'
+                                    }}
+                                />
+                            </div>
                             <div className="table-container">
                                 <table>
                                     <thead>
@@ -636,17 +654,29 @@ const Dividends = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {summary.transactions.map(txn => (
-                                            <tr key={txn.id}>
-                                                <td>{txn.transactionDate}</td>
-                                                <td style={{ fontWeight: '600', color: 'var(--accent)' }}>{txn.scrip || '-'}</td>
-                                                <td style={{ color: 'var(--text-muted)' }}>{txn.Account?.name || '-'}</td>
-                                                <td style={{ color: 'var(--text-muted)' }}>{txn.description || '-'}</td>
-                                                <td style={{ fontWeight: '600', color: 'var(--accent)' }}>
-                                                    {formatIndianRupee(parseFloat(txn.amount))}
-                                                </td>
-                                            </tr>
-                                        ))}
+                                        {summary.transactions
+                                            .filter(txn => {
+                                                if (!filterText) return true;
+                                                const search = filterText.toLowerCase();
+                                                return (
+                                                    (txn.transactionDate && txn.transactionDate.toLowerCase().includes(search)) ||
+                                                    (txn.scrip && txn.scrip.toLowerCase().includes(search)) ||
+                                                    (txn.Account?.name && txn.Account.name.toLowerCase().includes(search)) ||
+                                                    (txn.description && txn.description.toLowerCase().includes(search)) ||
+                                                    (txn.amount && txn.amount.toString().includes(search))
+                                                );
+                                            })
+                                            .map(txn => (
+                                                <tr key={txn.id}>
+                                                    <td>{txn.transactionDate}</td>
+                                                    <td style={{ fontWeight: '600', color: 'var(--accent)' }}>{txn.scrip || '-'}</td>
+                                                    <td style={{ color: 'var(--text-muted)' }}>{txn.Account?.name || '-'}</td>
+                                                    <td style={{ color: 'var(--text-muted)' }}>{txn.description || '-'}</td>
+                                                    <td style={{ fontWeight: '600', color: 'var(--accent)' }}>
+                                                        {formatIndianRupee(parseFloat(txn.amount))}
+                                                    </td>
+                                                </tr>
+                                            ))}
                                     </tbody>
                                 </table>
                             </div>
@@ -658,7 +688,7 @@ const Dividends = () => {
             {/* Empty State */}
             {!summary || summary.transactionCount === 0 && (
                 <div className="card" style={{ padding: '3rem', textAlign: 'center' }}>
-                    <DollarSign size={64} style={{ color: 'var(--text-muted)', opacity: 0.3, margin: '0 auto 1rem' }} />
+                    <IndianRupee size={64} style={{ color: 'var(--text-muted)', opacity: 0.3, margin: '0 auto 1rem' }} />
                     <h3 style={{ color: 'var(--text-muted)', marginBottom: '0.5rem' }}>No Dividend Data</h3>
                     <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
                         Add dividend transactions in the Cashflow section with category "Dividend"

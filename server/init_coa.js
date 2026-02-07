@@ -60,7 +60,15 @@ async function initCoA() {
         // 3. Map existing CashflowCategories as sub-accounts of Revenue/Expenses
         const categories = await CashflowCategory.findAll();
         for (const cat of categories) {
-            const parentAcc = cat.type === 'income' ? baseAccounts['Revenue'] : baseAccounts['Expenses'];
+            let parentAcc;
+            if (cat.isInvestment) {
+                // If it's an investment, it maps to Assets (e.g. "Investment in Stocks")
+                // We'll put it under strict 'Assets' -> 'Investments' if we had that structure,
+                // but for now 'Assets' is fine.
+                parentAcc = baseAccounts['Assets'];
+            } else {
+                parentAcc = cat.type === 'income' ? baseAccounts['Revenue'] : baseAccounts['Expenses'];
+            }
 
             await LedgerAccount.findOrCreate({
                 where: { linkedId: cat.id, linkedType: 'CashflowCategory' },
